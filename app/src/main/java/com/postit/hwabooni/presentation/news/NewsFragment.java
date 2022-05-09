@@ -1,4 +1,4 @@
-package com.postit.hwabooni.presentation.main;
+package com.postit.hwabooni.presentation.news;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.postit.hwabooni.R;
 import com.postit.hwabooni.databinding.FragmentNewsBinding;
 
 public class NewsFragment extends Fragment {
@@ -25,5 +24,6 @@ public class NewsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 }

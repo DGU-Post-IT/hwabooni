@@ -1,15 +1,12 @@
 package com.postit.hwabooni;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.view.MenuItem;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.postit.hwabooni.databinding.ActivityMainBinding;
 import com.postit.hwabooni.presentation.friend.FriendFragment;
-import com.postit.hwabooni.presentation.main.NewsFragment;
+import com.postit.hwabooni.presentation.news.NewsFragment;
 import com.postit.hwabooni.presentation.plant.PlantFragment;
 
 public class MainActivity extends AppCompatActivity {
