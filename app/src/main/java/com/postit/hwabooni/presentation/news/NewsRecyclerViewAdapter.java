@@ -1,6 +1,7 @@
 package com.postit.hwabooni.presentation.news;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -8,6 +9,9 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.postit.hwabooni.databinding.ItemNewsBinding;
 import com.postit.hwabooni.model.News;
 
@@ -39,6 +43,14 @@ public class NewsRecyclerViewAdapter extends ListAdapter<News, NewsRecyclerViewA
 
         void bind(News news) {
             binding.newsTextView.setText(news.getName());
+            if(news.getPicture() != null){
+                Glide.with(binding.getRoot())
+                        .load(news.getPicture())
+                        .transform(new CenterCrop(), new RoundedCorners(12))
+                        .into(binding.newsImageView);
+            }else{
+                binding.newsImageView.setVisibility(View.GONE);
+            }
         }
     }
 
