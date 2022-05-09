@@ -18,6 +18,7 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.CustomViewHo
     public PlantAdapter(ArrayList<PlantData> arrayList) {
         this.arrayList = arrayList;
     }
+    //Test
 
     @NonNull
     @Override
