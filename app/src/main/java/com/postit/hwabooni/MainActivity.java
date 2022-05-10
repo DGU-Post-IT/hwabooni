@@ -18,13 +18,13 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, new NewsFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NewsFragment()).commit();
 
         binding.navigationBar.setOnItemSelectedListener(item ->{
             switch (item.getItemId()){
-                case R.id.main : getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,new NewsFragment()).commit();break;
-                case R.id.friend:getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,new FriendFragment()).commit();break;
-                case R.id.plant:getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,new PlantFragment()).commit();break;
+                case R.id.main : getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new NewsFragment()).commit();break;
+                case R.id.friend:getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new FriendFragment()).commit();break;
+                case R.id.plant:getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new PlantFragment()).commit();break;
             }
             return true;
         });
