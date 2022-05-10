@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">hwabooni</string>
+    <string name="call">통화</string>
+
 </resources>
