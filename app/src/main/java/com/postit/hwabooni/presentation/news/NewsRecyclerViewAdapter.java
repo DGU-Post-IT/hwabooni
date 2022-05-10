@@ -3,7 +3,6 @@ package com.postit.hwabooni.presentation.news;
 import android.graphics.drawable.Drawable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
-import android.text.style.DynamicDrawableSpan;
 import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,6 +74,7 @@ public class NewsRecyclerViewAdapter extends ListAdapter<News, NewsRecyclerViewA
                     break;
             }
             if(news.getPicture() != null){
+                binding.newsImageView.setVisibility(View.VISIBLE);
                 Glide.with(binding.getRoot())
                         .load(news.getPicture())
                         .transform(new CenterCrop(), new RoundedCorners(12))
