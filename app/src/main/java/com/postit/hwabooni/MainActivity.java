@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.postit.hwabooni.databinding.ActivityMainBinding;
 import com.postit.hwabooni.presentation.friend.FriendFragment;
+import com.postit.hwabooni.presentation.market.MarketFragment;
 import com.postit.hwabooni.presentation.news.NewsFragment;
 import com.postit.hwabooni.presentation.plant.PlantFragment;
 
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.main : getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new NewsFragment()).commit();break;
                 case R.id.friend:getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new FriendFragment()).commit();break;
                 case R.id.plant:getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new PlantFragment()).commit();break;
+                case R.id.market:getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new MarketFragment()).commit();break;
             }
             return true;
         });
