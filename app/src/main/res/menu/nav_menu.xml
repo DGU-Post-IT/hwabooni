@@ -7,6 +7,9 @@
     android:id="@+id/friend"
     android:title="friend"/>
 <item
+    android:id="@+id/market"
+    android:title="market"/>
+<item
     android:id="@+id/plant"
     android:title="plant"/>
 

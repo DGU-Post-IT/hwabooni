@@ -1,6 +1,8 @@
 package com.postit.hwabooni.presentation.news;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
@@ -82,6 +84,10 @@ public class NewsRecyclerViewAdapter extends ListAdapter<News, NewsRecyclerViewA
             }else{
                 binding.newsImageView.setVisibility(View.GONE);
             }
+            binding.callButton.setOnClickListener((v)->{
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:01033904771"));
+                binding.getRoot().getContext().startActivity(intent);
+            });
         }
     }
 
