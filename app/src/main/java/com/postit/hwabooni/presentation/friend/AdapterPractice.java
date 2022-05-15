@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +32,12 @@ public class AdapterPractice extends RecyclerView.Adapter {
 
     private Context context;
 
+
+    private View.OnClickListener listener;
+
+    public void setListener(View.OnClickListener listener) {
+        this.listener = listener;
+    }
 
     public AdapterPractice(ArrayList<FriendData> friend,Context context){
         this.friend=friend;
@@ -64,6 +69,7 @@ public class AdapterPractice extends RecyclerView.Adapter {
             HeaderViewHolder headerViewHolder=(HeaderViewHolder) holder;
             final FriendRecyclerviewHeaderBinding binding=headerViewHolder.binding;
             binding.helperName.setText("사회복지사분 성함");
+            if(listener!=null) binding.emotionRecordButton.setOnClickListener(listener);
         }
         else{
             position-=1;
@@ -154,4 +160,5 @@ public class AdapterPractice extends RecyclerView.Adapter {
     public int getItemCount() {
         return friend.size()+1;
     }
+
 }
