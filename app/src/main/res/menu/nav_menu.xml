@@ -4,13 +4,13 @@
     android:id="@+id/main"
     android:title="main"/>
 <item
-    android:id="@+id/friend"
-    android:title="friend"/>
+    android:id="@+id/plant"
+    android:title="plant"/>
 <item
     android:id="@+id/market"
     android:title="market"/>
 <item
-    android:id="@+id/plant"
-    android:title="plant"/>
+    android:id="@+id/friend"
+    android:title="friend"/>
 
 </menu>
