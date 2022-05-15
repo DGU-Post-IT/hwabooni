@@ -1,36 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="8dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardElevation="8dp"
-    app:cardCornerRadius="8dp">
+    android:layout_marginBottom="8dp"
+    android:layout_marginTop="4dp"
+
+    app:cardCornerRadius="8dp"
+    app:cardElevation="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/plant_image_view"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/friend_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+
+            />
 
         <TextView
-            android:id="@+id/tv_name"
+            android:id="@+id/friend_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:text="TextView"
+            android:text="이름"
+            android:textSize="30dp"
             android:textColor="?android:attr/textColorPrimary"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/friend_emotion_view"
+            app:layout_constraintStart_toEndOf="@id/plant_image_view"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tv_number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:text="TextView"
+        <ImageView
+            android:id="@+id/friend_emotion_view"
+            android:layout_marginStart="40dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/tv_name"
-            app:layout_constraintTop_toBottomOf="@+id/tv_name" />
+            app:layout_constraintStart_toEndOf="@id/friend_name"
+            app:layout_constraintTop_toTopOf="parent"
+
+            />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/friend_call_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="6dp"
+            android:background="?android:selectableItemBackgroundBorderless"
+            android:contentDescription="@string/call"
+            android:padding="6dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_telephone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
