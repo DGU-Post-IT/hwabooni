@@ -1,27 +1,21 @@
 package com.postit.hwabooni.presentation.friend;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.postit.hwabooni.R;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.postit.hwabooni.databinding.FragmentFriendBinding;
-import com.postit.hwabooni.databinding.FragmentNewsBinding;
 import com.postit.hwabooni.model.FriendData;
-import com.postit.hwabooni.model.News;
-import com.postit.hwabooni.presentation.news.NewsRecyclerViewAdapter;
+import com.postit.hwabooni.presentation.emotionrecord.EmotionRecordFragment;
 
 import java.util.ArrayList;
 
@@ -61,6 +55,9 @@ public class FriendFragment extends Fragment {
                 Log.d(TAG,"더미데이터! :"+data.get(1).getName());
                 adapter=new AdapterPractice(data,getContext());
                 binding.friendRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+                adapter.setListener((v)->{
+                    new EmotionRecordFragment().show(requireActivity().getSupportFragmentManager(), "EMOTION_RECORD");
+                });
                 binding.friendRecyclerView.setAdapter(adapter);
             }
 
@@ -71,7 +68,7 @@ public class FriendFragment extends Fragment {
         /*adapter = new FriendRecyclerViewAdapter();
         binding.friendRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
         binding.friendRecyclerView.setAdapter(adapter);
-
+기
         db.collection("dummyFriend").get().addOnCompleteListener((document)->{
             if(document.isSuccessful()){
                 ArrayList<FriendData> data = new ArrayList<>();
