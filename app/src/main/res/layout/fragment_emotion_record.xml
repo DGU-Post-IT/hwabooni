@@ -5,7 +5,7 @@
 
     <LinearLayout
         android:layout_width="300dp"
-        android:layout_height="400dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@color/black"
         >
@@ -43,7 +43,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="80dp"
-            android:src="@drawable/button_good"
+            android:src="@drawable/button_confused"
             />
 
 
