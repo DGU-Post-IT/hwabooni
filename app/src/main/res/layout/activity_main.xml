@@ -15,13 +15,20 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
+        app:itemIconSize="45dp"
+        app:labelVisibilityMode="unlabeled"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/nav_menu"
         android:id="@+id/navigation_bar"
+        android:background="@color/more_light_gray"
+        app:itemIconTint="@drawable/menu_selector_color"
+        app:itemTextColor="@drawable/menu_selector_color"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
