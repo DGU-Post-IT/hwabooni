@@ -1,10 +1,16 @@
 package com.postit.hwabooni;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
+import android.app.ActionBar;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.View;
 
 import com.postit.hwabooni.databinding.ActivityMainBinding;
+import com.postit.hwabooni.databinding.AppbarMainBinding;
 import com.postit.hwabooni.presentation.friend.FriendFragment;
 import com.postit.hwabooni.presentation.market.MarketFragment;
 import com.postit.hwabooni.presentation.news.NewsFragment;
@@ -13,9 +19,17 @@ import com.postit.hwabooni.presentation.plant.PlantFragment;
 public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;
+
+    AppbarMainBinding appbarMainBinding;
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -32,5 +46,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
 
 }
