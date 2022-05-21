@@ -31,5 +31,19 @@
         </Button>
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/iv_plant"
+        android:layout_width="match_parent"
+        android:layout_height="150dp">
+
+    </ImageView>
+
+    <ImageView
+        android:id="@+id/iv_prettyWord"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:src="@drawable/button_mission_incompletion"
+        ></ImageView>
+
 
 </LinearLayout>

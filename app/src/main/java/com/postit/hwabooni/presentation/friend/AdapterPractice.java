@@ -70,6 +70,7 @@ public class AdapterPractice extends RecyclerView.Adapter {
             final FriendRecyclerviewHeaderBinding binding=headerViewHolder.binding;
             binding.helperName.setText("사회복지사분 성함");
             if(listener!=null) binding.emotionRecordButton.setOnClickListener(listener);
+
         }
         else{
             position-=1;
