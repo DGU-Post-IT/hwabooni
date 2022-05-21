@@ -6,6 +6,9 @@
     android:background="@color/light_gray">
 
 
+
+
+
     <androidx.cardview.widget.CardView
         android:id="@+id/me"
         android:layout_width="match_parent"
@@ -49,7 +52,7 @@
                 android:layout_weight="1" />
 
             <ImageButton
-                android:id="@+id/emotion_select"
+                android:id="@+id/emotion_record_button"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_gravity="center"
@@ -70,7 +73,9 @@
         app:layout_constraintBottom_toTopOf="@id/helper"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/me">
+        app:layout_constraintTop_toBottomOf="@id/me"
+
+        >
 
         <TextView
             android:layout_width="wrap_content"
@@ -88,6 +93,7 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         app:cardCornerRadius="8dp"
+        app:layout_constraintBottom_toTopOf="@id/friend_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/helper_bar">
