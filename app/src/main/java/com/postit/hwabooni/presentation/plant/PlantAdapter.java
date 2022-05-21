@@ -1,4 +1,4 @@
-package com.postit.hwabooni;
+package com.postit.hwabooni.presentation.plant;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,11 +9,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.postit.hwabooni.R;
+import com.postit.hwabooni.model.PlantData;
+
 import java.util.ArrayList;
 
 public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.CustomViewHolder> {
 
     private ArrayList<PlantData> arrayList;
+
+    OnClickListener listener;
 
     public PlantAdapter(ArrayList<PlantData> arrayList) {
         this.arrayList = arrayList;
@@ -32,16 +37,13 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.CustomViewHo
 
     @Override
     public void onBindViewHolder(@NonNull PlantAdapter.CustomViewHolder holder, int position) {
-        holder.tv_plant.setText(arrayList.get(position).getTv_plant());
+        holder.tv_plant.setText(arrayList.get(position).getmyPlantName());
+        holder.id = arrayList.get(position).getId();
 
 
         holder.itemView.setTag(position);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String plantName = holder.tv_plant.getText().toString();
-                Toast.makeText(v.getContext(), plantName, Toast.LENGTH_SHORT).show();
-            }
+        holder.itemView.setOnClickListener((v)->{
+            if(listener!=null) listener.onClick(holder.id);
         });
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -70,11 +72,16 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.CustomViewHo
     public class CustomViewHolder extends RecyclerView.ViewHolder {
 
         protected TextView tv_plant;
+        String id;
 
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
 
             this.tv_plant = (TextView) itemView.findViewById(R.id.tv_plant);
         }
+    }
+
+    interface OnClickListener{
+        void onClick(String id);
     }
 }
