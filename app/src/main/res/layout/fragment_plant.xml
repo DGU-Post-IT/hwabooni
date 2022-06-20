@@ -116,6 +116,13 @@
                         android:src="@drawable/water_5"
                         android:visibility="gone" />
 
+                    <ImageView
+                        android:id="@+id/humidNo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/water_no"
+                        android:visibility="gone" />
+
                 </LinearLayout>
 
 
@@ -190,6 +197,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/temp_5"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:id="@+id/tempNo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/temp_no"
                         android:visibility="gone" />
 
                 </LinearLayout>

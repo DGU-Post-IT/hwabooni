@@ -15,6 +15,11 @@ public class PlantData {
 
     }
 
+    public PlantData(String n, String p) {
+        myPlantName = n;
+        myPlantPicture = p;
+    }
+
 
     public String getPrettyWord() {
         return prettyWord;
