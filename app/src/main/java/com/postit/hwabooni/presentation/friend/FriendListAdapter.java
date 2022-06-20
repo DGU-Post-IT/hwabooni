@@ -22,7 +22,7 @@ import com.postit.hwabooni.model.FriendData;
 
 import java.util.ArrayList;
 
-public class AdapterPractice extends RecyclerView.Adapter {
+public class FriendListAdapter extends RecyclerView.Adapter {
 
     private static final int TYPE_HEADER=0;
 
@@ -32,14 +32,13 @@ public class AdapterPractice extends RecyclerView.Adapter {
 
     private Context context;
 
-
     private View.OnClickListener listener;
 
     public void setListener(View.OnClickListener listener) {
         this.listener = listener;
     }
 
-    public AdapterPractice(ArrayList<FriendData> friend,Context context){
+    public FriendListAdapter(ArrayList<FriendData> friend, Context context){
         this.friend=friend;
         this.context=context;
     }
@@ -121,30 +120,6 @@ public class AdapterPractice extends RecyclerView.Adapter {
             this.binding = binding;
         }
 
-        /*void bind(FriendData friend) {
-            binding.friendName.setText(friend.getName());
-
-            Drawable drawable = AppCompatResources.getDrawable(binding.getRoot().getContext(), Emotion.values()[Integer.parseInt(friend.getEmotion())].getIcon());
-            binding.friendEmotionView.setImageDrawable(drawable);
-
-            binding.plantImageView.setVisibility(View.VISIBLE);
-            Glide.with(binding.getRoot())
-                    .load(friend.getPlantImage())
-                    .transform(new CenterCrop(), new RoundedCorners(12))
-                    .into(binding.plantImageView);
-
-
-
-            String phoneNumber="tel:"+friend.getPhone();
-
-
-            binding.friendCallButton.setOnClickListener((v)->{
-                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(phoneNumber));
-                binding.getRoot().getContext().startActivity(intent);
-            });
-
-
-        }*/
     }
     @Override
     public int getItemViewType(int position) {
@@ -154,8 +129,6 @@ public class AdapterPractice extends RecyclerView.Adapter {
             return TYPE_ITEM;
         }
     }
-
-
 
     @Override
     public int getItemCount() {
