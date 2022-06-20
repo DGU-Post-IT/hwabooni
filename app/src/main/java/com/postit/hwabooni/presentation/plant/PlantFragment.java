@@ -17,12 +17,14 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.postit.hwabooni.R;
 import com.postit.hwabooni.databinding.FragmentPlantBinding;
 import com.postit.hwabooni.model.PlantData;
 import com.postit.hwabooni.model.PlantHumidData;
 import com.postit.hwabooni.model.PlantTempData;
 import com.postit.hwabooni.model.PlantTempHumid;
+import com.postit.hwabooni.presentation.emotionrecord.EmotionRecordFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -79,12 +81,16 @@ public class PlantFragment extends Fragment {
                         }
 
                         Log.d("새로운 Humid", id + String.valueOf(hashHumid.get(id)));
-                        setHumid(hashHumid.get(id));
                         Log.d("새로운 Temp", id + String.valueOf(hashTemp.get(id)));
-                        setTemp(hashTemp.get(id));
-
-
-                        break;
+                        try{
+                            setHumid(hashHumid.get(id));
+                            setTemp(hashTemp.get(id));
+                        }
+                        catch(Exception e){
+                            setHumid(-99999);
+                            setTemp(-99999);
+                        }
+                       break;
                     }
                 }
 
@@ -95,10 +101,12 @@ public class PlantFragment extends Fragment {
         binding.btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PlantData plantData = new PlantData();
-                plantData.setmyPlantName("정집민");
-                arrayList.add(plantData);
-                plantAdapter.notifyDataSetChanged();
+//                PlantData plantData = new PlantData();
+//                plantData.setmyPlantName("정집민");
+//                arrayList.add(plantData);
+//                plantAdapter.notifyDataSetChanged();
+
+                new PlantAddFragment().show(requireActivity().getSupportFragmentManager(), "PLANT_ADD");
             }
         });
 
@@ -112,49 +120,93 @@ public class PlantFragment extends Fragment {
                     PlantData temp = doc.toObject(PlantData.class);
                     data.add(temp);
                     Log.d("ID", temp.getId());
-                    
+
                     //처음 식물만 화면에 바로 나타내주기 위해서
                     if(i == 0){
-                        db.collection("dummyPlant").document(temp.getId()).collection("humidRecord").get().addOnCompleteListener((docu)->{
-                            if(docu.isSuccessful()){
-                                PlantHumidData tempData = docu.getResult().getDocuments().get(0).toObject(PlantHumidData.class);
-                                double humid = tempData.getHumidity();
-                                Log.d("습도",String.valueOf(humid));
-                                hashHumid.put(temp.getId(), humid);
-                                setHumid(humid);
 
+
+                        db.collection("dummyPlant").document(temp.getId()).collection("humidRecord").get().addOnCompleteListener((docu)->{
+
+                            if(docu.isSuccessful()){
+                                QuerySnapshot documentResult = docu.getResult();
+                                //humidRecord가 없지 않은 경우에만 hashmap 추가
+                                if(documentResult.isEmpty()){
+
+                                }
+                                else{
+                                    PlantHumidData tempData = docu.getResult().getDocuments().get(0).toObject(PlantHumidData.class);
+                                    double humid = tempData.getHumidity();
+                                    Log.d("습도",String.valueOf(humid));
+                                    hashHumid.put(temp.getId(), humid);
+                                    setHumid(humid);
+                                }
+
+
+                            }
+                            else{
+                                Log.d("TAG", "humid와 temp 오류");
                             }
                         });
 
                         db.collection("dummyPlant").document(temp.getId()).collection("tempRecord").get()
                                 .addOnCompleteListener((docu)->{
                                     if(docu.isSuccessful()){
-                                        PlantTempData tempData = docu.getResult().getDocuments().get(0).toObject(PlantTempData.class);
-                                        double temper = tempData.getTemperature();
-                                        Log.d("온도",String.valueOf(temper));
-                                        hashTemp.put(temp.getId(), temper);
-                                        setTemp(temper);
+                                        QuerySnapshot documentResult = docu.getResult();
+                                        if(documentResult.isEmpty()){
 
+                                        }
+                                        else {
+                                            PlantTempData tempData = docu.getResult().getDocuments().get(0).toObject(PlantTempData.class);
+                                            double temper = tempData.getTemperature();
+                                            Log.d("온도", String.valueOf(temper));
+                                            hashTemp.put(temp.getId(), temper);
+                                            setTemp(temper);
+                                        }
+
+                                    }
+
+                                    else{
+                                        Log.d("TAG", "humid와 temp 오류");
                                     }
                                 });
                     }
                     else{
                         db.collection("dummyPlant").document(temp.getId()).collection("humidRecord").get().addOnCompleteListener((docu)->{
                             if(docu.isSuccessful()){
-                                PlantHumidData tempData = docu.getResult().getDocuments().get(0).toObject(PlantHumidData.class);
-                                double humid = tempData.getHumidity();
-                                Log.d("습도",String.valueOf(humid));
-                                hashHumid.put(temp.getId(), humid);
+                                QuerySnapshot documentResult = docu.getResult();
+                                if(documentResult.isEmpty()){
+
+                                }
+                                else{
+                                    PlantHumidData tempData = docu.getResult().getDocuments().get(0).toObject(PlantHumidData.class);
+                                    double humid = tempData.getHumidity();
+                                    Log.d("습도",String.valueOf(humid));
+                                    hashHumid.put(temp.getId(), humid);
+                                }
+
+                            }
+                            else{
+                                Log.d("TAG", "humid와 temp 오류");
                             }
                         });
 
                         db.collection("dummyPlant").document(temp.getId()).collection("tempRecord").get()
                                 .addOnCompleteListener((docu)->{
                                     if(docu.isSuccessful()){
-                                        PlantTempData tempData = docu.getResult().getDocuments().get(0).toObject(PlantTempData.class);
-                                        double temper = tempData.getTemperature();
-                                        Log.d("온도",String.valueOf(temper));
-                                        hashTemp.put(temp.getId(), temper);
+                                        QuerySnapshot documentResult = docu.getResult();
+                                        if(documentResult.isEmpty()){
+
+                                        }
+                                        else{
+                                            PlantTempData tempData = docu.getResult().getDocuments().get(0).toObject(PlantTempData.class);
+                                            double temper = tempData.getTemperature();
+                                            Log.d("온도",String.valueOf(temper));
+                                            hashTemp.put(temp.getId(), temper);
+                                        }
+
+                                    }
+                                    else{
+                                        Log.d("TAG", "humid와 temp 오류");
                                     }
                                 });
                     }
@@ -204,6 +256,15 @@ public class PlantFragment extends Fragment {
     }
 
     void viewHumid(double value, int high, int low){
+        if(value==-99999){
+            binding.humidNo.setVisibility(View.VISIBLE);
+            binding.humid0.setVisibility(View.GONE);
+            binding.humid1.setVisibility(View.GONE);
+            binding.humid2.setVisibility(View.GONE);
+            binding.humid3.setVisibility(View.GONE);
+            binding.humid4.setVisibility(View.GONE);
+            return;
+        }
         int v = -1;
 
         if(value < low) v = 4;
@@ -264,6 +325,15 @@ public class PlantFragment extends Fragment {
     }
 
     void viewTemp(double value, int high, int low){
+        if(value==-99999){
+            binding.tempNo.setVisibility(View.VISIBLE);
+            binding.temp0.setVisibility(View.GONE);
+            binding.temp1.setVisibility(View.GONE);
+            binding.temp2.setVisibility(View.GONE);
+            binding.temp3.setVisibility(View.GONE);
+            binding.temp4.setVisibility(View.GONE);
+            return;
+        }
         int v = -1;
 
         if(value < low) v = 0;
