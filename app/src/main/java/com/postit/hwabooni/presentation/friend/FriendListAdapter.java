@@ -24,9 +24,15 @@ import java.util.ArrayList;
 
 public class FriendListAdapter extends RecyclerView.Adapter {
 
-    private static final int TYPE_HEADER=0;
+    interface FriendClickListener {
+        void onClick(String name);
+    }
 
-    private static final int TYPE_ITEM=1;
+    private FriendClickListener friendClickListener;
+
+    private static final int TYPE_HEADER = 0;
+
+    private static final int TYPE_ITEM = 1;
 
     private ArrayList<FriendData> friend;
 
@@ -38,9 +44,11 @@ public class FriendListAdapter extends RecyclerView.Adapter {
         this.listener = listener;
     }
 
-    public FriendListAdapter(ArrayList<FriendData> friend, Context context){
-        this.friend=friend;
-        this.context=context;
+    public void setFriendClickListener(FriendClickListener listener){this.friendClickListener=listener;}
+
+    public FriendListAdapter(ArrayList<FriendData> friend, Context context) {
+        this.friend = friend;
+        this.context = context;
     }
 
     @NonNull
@@ -48,13 +56,12 @@ public class FriendListAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder holder;
 
-        if(viewType==TYPE_HEADER){
-            FriendRecyclerviewHeaderBinding headerBinding=FriendRecyclerviewHeaderBinding.inflate(LayoutInflater.from(context),parent,false);
-            holder= new HeaderViewHolder(headerBinding);
-        }
-        else{
-            CardviewFriendBinding itemBinding=CardviewFriendBinding.inflate(LayoutInflater.from(context),parent,false);
-            holder= new FriendViewHolder(itemBinding);
+        if (viewType == TYPE_HEADER) {
+            FriendRecyclerviewHeaderBinding headerBinding = FriendRecyclerviewHeaderBinding.inflate(LayoutInflater.from(context), parent, false);
+            holder = new HeaderViewHolder(headerBinding);
+        } else {
+            CardviewFriendBinding itemBinding = CardviewFriendBinding.inflate(LayoutInflater.from(context), parent, false);
+            holder = new FriendViewHolder(itemBinding);
         }
 
         return holder;
@@ -64,18 +71,18 @@ public class FriendListAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
 
-        if(holder instanceof HeaderViewHolder){
-            HeaderViewHolder headerViewHolder=(HeaderViewHolder) holder;
-            final FriendRecyclerviewHeaderBinding binding=headerViewHolder.binding;
+        if (holder instanceof HeaderViewHolder) {
+            HeaderViewHolder headerViewHolder = (HeaderViewHolder) holder;
+            final FriendRecyclerviewHeaderBinding binding = headerViewHolder.binding;
             binding.helperName.setText("사회복지사분 성함");
-            if(listener!=null) binding.emotionRecordButton.setOnClickListener(listener);
+            if (listener != null) binding.emotionRecordButton.setOnClickListener(listener);
 
-        }
-        else{
-            position-=1;
-            FriendViewHolder itemViewHolder=(FriendViewHolder) holder;
-            final CardviewFriendBinding binding=itemViewHolder.binding;
-            binding.friendName.setText(friend.get(position).getName());
+        } else {
+            position -= 1;
+            FriendViewHolder itemViewHolder = (FriendViewHolder) holder;
+            final CardviewFriendBinding binding = itemViewHolder.binding;
+            String friendName = friend.get(position).getName();
+            binding.friendName.setText(friendName);
 
             Drawable drawable = AppCompatResources.getDrawable(binding.getRoot().getContext(), Emotion.values()[Integer.parseInt(friend.get(position).getEmotion())].getIcon());
             binding.friendEmotionView.setImageDrawable(drawable);
@@ -87,11 +94,14 @@ public class FriendListAdapter extends RecyclerView.Adapter {
                     .into(binding.plantImageView);
 
 
+            String phoneNumber = "tel:" + friend.get(position).getPhone();
 
-            String phoneNumber="tel:"+friend.get(position).getPhone();
+            binding.getRoot().setOnClickListener((v) -> {
+                if (friendClickListener == null) return;
+                friendClickListener.onClick(friendName);
+            });
 
-
-            binding.friendCallButton.setOnClickListener((v)->{
+            binding.friendCallButton.setOnClickListener((v) -> {
                 Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(phoneNumber));
                 binding.getRoot().getContext().startActivity(intent);
             });
@@ -99,15 +109,15 @@ public class FriendListAdapter extends RecyclerView.Adapter {
         }
 
 
-
     }
-    class HeaderViewHolder extends RecyclerView.ViewHolder{
+
+    class HeaderViewHolder extends RecyclerView.ViewHolder {
 
         FriendRecyclerviewHeaderBinding binding;
 
         HeaderViewHolder(@NonNull FriendRecyclerviewHeaderBinding binding) {
             super(binding.getRoot());
-            this.binding=binding;
+            this.binding = binding;
         }
     }
 
@@ -121,6 +131,7 @@ public class FriendListAdapter extends RecyclerView.Adapter {
         }
 
     }
+
     @Override
     public int getItemViewType(int position) {
         if (position == 0) {
@@ -132,7 +143,7 @@ public class FriendListAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return friend.size()+1;
+        return friend.size() + 1;
     }
 
 }
