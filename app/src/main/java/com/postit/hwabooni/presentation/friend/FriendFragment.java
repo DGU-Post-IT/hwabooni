@@ -24,10 +24,8 @@ public class FriendFragment extends Fragment {
     private static final String TAG = "FriendFragment";
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-
     FragmentFriendBinding binding;
-    //FriendRecyclerViewAdapter adapter;
-    AdapterPractice adapter;
+    FriendListAdapter adapter;
 
     @Nullable
     @Override
@@ -52,8 +50,8 @@ public class FriendFragment extends Fragment {
                     data.add(doc.toObject(FriendData.class));
 
                 }
-                Log.d(TAG,"더미데이터! :"+data.get(1).getName());
-                adapter=new AdapterPractice(data,getContext());
+
+                adapter=new FriendListAdapter(data,getContext());
                 binding.friendRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
                 adapter.setListener((v)->{
                     new EmotionRecordFragment().show(requireActivity().getSupportFragmentManager(), "EMOTION_RECORD");
@@ -63,42 +61,5 @@ public class FriendFragment extends Fragment {
 
         });
 
-
-
-        /*adapter = new FriendRecyclerViewAdapter();
-        binding.friendRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
-        binding.friendRecyclerView.setAdapter(adapter);
-기
-        db.collection("dummyFriend").get().addOnCompleteListener((document)->{
-            if(document.isSuccessful()){
-                ArrayList<FriendData> data = new ArrayList<>();
-                for (DocumentSnapshot doc : document.getResult().getDocuments()){
-                    data.add(doc.toObject(FriendData.class));
-                }
-                adapter.submitList(data);
-
-            }
-        });*/
     }
 }
-
-
-
-
-
-
-
-
-
-
-/*public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        binding.callButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //전화 어플에 있는 Activity 정보를 넣어 Intent 정의
-                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:01033904771"));
-                startActivity(intent);
-            }
-        });*/
