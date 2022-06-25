@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import com.postit.hwabooni.R;
 
@@ -77,8 +78,9 @@ public class IndicatorBarView extends View {
         if (canvas == null) return;
         int w = getWidth();
         int h = getHeight();
+        int gray = ContextCompat.getColor(getContext(), R.color.indicator_gray);
         double key = value / max;
-        paint.setColor(Color.WHITE);
+        paint.setColor(gray);
         canvas.drawRect(w * 0.00f, h * 0.1f, w * 1.00f, h * 0.54f, paint);
         paint.setColor(strokeColor);
         canvas.drawRect(w * 0.22f, h * 0.1f, w * 0.78f, h * 0.54f, paint);
@@ -88,13 +90,13 @@ public class IndicatorBarView extends View {
         paint.setLetterSpacing(-0.1f);
         paint.setTextSize(textSize);
 
-        paint.setColor((key <= 0.22) ? Color.BLACK : Color.WHITE);
+        paint.setColor((key <= 0.22) ? Color.BLACK : gray);
         paint.setTextAlign(Paint.Align.LEFT);
         canvas.drawText(leftText, w * 0.02f, h * 0.64f + textSize, paint);
-        paint.setColor((key > 0.22 && key<0.78) ? Color.BLACK : Color.WHITE);
+        paint.setColor((key > 0.22 && key<0.78) ? Color.BLACK : gray);
         paint.setTextAlign(Paint.Align.CENTER);
         canvas.drawText(midText, w * 0.5f, h * 0.64f + textSize, paint);
-        paint.setColor((key >= 0.78) ? Color.BLACK : Color.WHITE);
+        paint.setColor((key >= 0.78) ? Color.BLACK : gray);
         paint.setTextAlign(Paint.Align.RIGHT);
         canvas.drawText(rightText, w * 0.98f, h * 0.64f + textSize, paint);
     }

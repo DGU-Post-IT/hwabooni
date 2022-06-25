@@ -16,4 +16,5 @@
     <color name="stroke_blue">#b2f1f8</color>
     <color name="indicator_yellow">#cea600</color>
     <color name="stroke_yellow">#efdc8a</color>
+    <color name="indicator_gray">#f2f2f2</color>
 </resources>
