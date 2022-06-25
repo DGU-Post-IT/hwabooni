@@ -1,5 +1,7 @@
-package com.postit.hwabooni.presentation.plant;
+package com.postit.hwabooni.presentation.friendplant;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,7 +20,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.postit.hwabooni.R;
-import com.postit.hwabooni.databinding.FragmentPlantBinding;
+import com.postit.hwabooni.databinding.FragmentFriendPlantBinding;
 import com.postit.hwabooni.model.PlantData;
 import com.postit.hwabooni.model.PlantHumidData;
 import com.postit.hwabooni.model.PlantTempData;
@@ -26,22 +28,23 @@ import com.postit.hwabooni.model.PlantTempData;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class PlantFragment extends Fragment {
-
+public class FriendPlantFragment extends Fragment {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    FragmentPlantBinding binding;
+    @NonNull FragmentFriendPlantBinding binding;
     private ArrayList<PlantData> arrayList;
     private HashMap<String, Double> hashTemp;
     private HashMap<String, Double> hashHumid;
-    private PlantAdapter plantAdapter;
+    private FriendPlantAdapter plantAdapter;
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
+    private String name;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = FragmentPlantBinding.inflate(inflater, container, false);
+        binding = FragmentFriendPlantBinding.inflate(inflater, container, false);
+        this.name = getArguments().getString(FRIEND_NAME_CODE);
         return binding.getRoot();
 
     }
@@ -49,7 +52,8 @@ public class PlantFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        if(name==null) getActivity().getFragmentManager().popBackStack();
+        binding.friendNameTextView.setText(name+"님의 식물들입니다.");
         recyclerView = binding.rvPlant;
         linearLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -57,34 +61,32 @@ public class PlantFragment extends Fragment {
 
         hashTemp = new HashMap<>();
         hashHumid = new HashMap<>();
-        plantAdapter = new PlantAdapter(arrayList);
+        plantAdapter = new FriendPlantAdapter(arrayList);
 
-        plantAdapter.listener = new PlantAdapter.OnClickListener() {
+        plantAdapter.listener = new FriendPlantAdapter.OnClickListener() {
             @Override
             public void onClick(String id) {
                 Toast.makeText(getContext(), id, Toast.LENGTH_SHORT).show();
-                for (PlantData pd : arrayList) {
-                    if (pd.getId().equals(id)) {
+                for(PlantData pd : arrayList){
+                    if(pd.getId().equals(id)){
                         String imageUrl = pd.getMyPlantPicture();
                         Glide.with(getContext()).load(imageUrl).into(binding.ivPlant);
 
 
-                        if (pd.getPrettyWord() != null) {
+                        if(pd.getPrettyWord()!=null){
                             binding.ivPrettyWord.setImageResource(R.drawable.button_misson_completion);
-                        } else {
+                        }
+                        else{
                             binding.ivPrettyWord.setImageResource(R.drawable.button_mission_incompletion);
                             Log.d("오늘 예쁜말 없음", "오늘 예쁜말 없음");
                         }
 
                         Log.d("새로운 Humid", id + String.valueOf(hashHumid.get(id)));
+                        setHumid(hashHumid.get(id));
                         Log.d("새로운 Temp", id + String.valueOf(hashTemp.get(id)));
-                        try {
-                            setHumid(hashHumid.get(id));
-                            setTemp(hashTemp.get(id));
-                        } catch (Exception e) {
-                            setHumid(-99999);
-                            setTemp(-99999);
-                        }
+                        setTemp(hashTemp.get(id));
+
+
                         break;
                     }
                 }
@@ -93,73 +95,43 @@ public class PlantFragment extends Fragment {
         };
         recyclerView.setAdapter(plantAdapter);
 
-        binding.btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                PlantData plantData = new PlantData();
-//                plantData.setmyPlantName("정집민");
-//                arrayList.add(plantData);
-//                plantAdapter.notifyDataSetChanged();
-
-                new PlantAddFragment().show(requireActivity().getSupportFragmentManager(), "PLANT_ADD");
-            }
-        });
-
-        db.collection("dummyPlant").get().addOnCompleteListener((document) -> {
-            if (document.isSuccessful()) {
+        db.collection("dummyPlant").get().addOnCompleteListener((document)->{
+            if(document.isSuccessful()){
                 ArrayList<PlantData> data = new ArrayList<>();
                 int i = 0;
 
-                for (DocumentSnapshot doc : document.getResult().getDocuments()) {
+                for (DocumentSnapshot doc : document.getResult().getDocuments()){
 
                     PlantData temp = doc.toObject(PlantData.class);
                     data.add(temp);
                     Log.d("ID", temp.getId());
 
                     //처음 식물만 화면에 바로 나타내주기 위해서
-                    if (i == 0) {
+                    if(i == 0){
+                        db.collection("dummyPlant").document(temp.getId()).collection("humidRecord").get().addOnCompleteListener((docu)->{
+                            if(docu.isSuccessful()){
+                                PlantHumidData tempData = docu.getResult().getDocuments().get(0).toObject(PlantHumidData.class);
+                                double humid = tempData.getHumidity();
+                                Log.d("습도",String.valueOf(humid));
+                                hashHumid.put(temp.getId(), humid);
+                                setHumid(humid);
 
-
-                        db.collection("dummyPlant").document(temp.getId()).collection("humidRecord").get().addOnCompleteListener((docu) -> {
-
-                            if (docu.isSuccessful()) {
-                                QuerySnapshot documentResult = docu.getResult();
-                                //humidRecord가 없지 않은 경우에만 hashmap 추가
-                                if (documentResult.isEmpty()) {
-
-                                } else {
-                                    PlantHumidData tempData = docu.getResult().getDocuments().get(0).toObject(PlantHumidData.class);
-                                    double humid = tempData.getHumidity();
-                                    Log.d("습도", String.valueOf(humid));
-                                    hashHumid.put(temp.getId(), humid);
-                                    setHumid(humid);
-                                }
-
-
-                            } else {
-                                Log.d("TAG", "humid와 temp 오류");
                             }
                         });
 
                         db.collection("dummyPlant").document(temp.getId()).collection("tempRecord").get()
-                                .addOnCompleteListener((docu) -> {
-                                    if (docu.isSuccessful()) {
-                                        QuerySnapshot documentResult = docu.getResult();
-                                        if (documentResult.isEmpty()) {
+                                .addOnCompleteListener((docu)->{
+                                    if(docu.isSuccessful()){
+                                        PlantTempData tempData = docu.getResult().getDocuments().get(0).toObject(PlantTempData.class);
+                                        double temper = tempData.getTemperature();
+                                        Log.d("온도",String.valueOf(temper));
+                                        hashTemp.put(temp.getId(), temper);
+                                        setTemp(temper);
 
-                                        } else {
-                                            PlantTempData tempData = docu.getResult().getDocuments().get(0).toObject(PlantTempData.class);
-                                            double temper = tempData.getTemperature();
-                                            Log.d("온도", String.valueOf(temper));
-                                            hashTemp.put(temp.getId(), temper);
-                                            setTemp(temper);
-                                        }
-
-                                    } else {
-                                        Log.d("TAG", "humid와 temp 오류");
                                     }
                                 });
-                    } else {
+                    }
+                    else{
                         db.collection("dummyPlant").document(temp.getId()).collection("humidRecord").get().addOnCompleteListener((docu) -> {
                             if (docu.isSuccessful()) {
                                 QuerySnapshot documentResult = docu.getResult();
@@ -203,15 +175,16 @@ public class PlantFragment extends Fragment {
                 arrayList.addAll(data);
 
                 plantAdapter.notifyDataSetChanged();
-                if (arrayList.get(0) != null) {
-                    Log.d("FirstTest", arrayList.get(0).getId() + "," + arrayList.get(0).getmyPlantName());
+                if(arrayList.get(0)!=null){
+                    Log.d("FirstTest", arrayList.get(0).getId()+"," +arrayList.get(0).getmyPlantName());
 
                     String imageUrl = arrayList.get(0).getMyPlantPicture();
                     Glide.with(getContext()).load(imageUrl).into(binding.ivPlant);
 
-                    if (arrayList.get(0).getPrettyWord() != null) {
+                    if(arrayList.get(0).getPrettyWord()!=null){
                         binding.ivPrettyWord.setImageResource(R.drawable.button_misson_completion);
-                    } else {
+                    }
+                    else{
                         binding.ivPrettyWord.setImageResource(R.drawable.button_mission_incompletion);
                         Log.d("오늘 예쁜말 없음", "오늘 예쁜말 없음");
                     }
@@ -263,4 +236,7 @@ public class PlantFragment extends Fragment {
             binding.tempIndicator.setValue((value-15)/10);
         }
     }
+
+
+    public static String FRIEND_NAME_CODE = "1000";
 }

@@ -12,4 +12,9 @@
     <color name="blue">#9ACAD2</color>
     <color name="light_gray">#E6E6E6</color>
     <color name="more_light_gray">#F6F6f6</color>
+    <color name="indicator_blue">#03b7c6</color>
+    <color name="stroke_blue">#b2f1f8</color>
+    <color name="indicator_yellow">#cea600</color>
+    <color name="stroke_yellow">#efdc8a</color>
+    <color name="indicator_gray">#f2f2f2</color>
 </resources>
