@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.postit.hwabooni.R;
 import com.postit.hwabooni.databinding.FragmentFriendPlantBinding;
 import com.postit.hwabooni.model.PlantData;
@@ -131,22 +132,38 @@ public class FriendPlantFragment extends Fragment {
                                 });
                     }
                     else{
-                        db.collection("dummyPlant").document(temp.getId()).collection("humidRecord").get().addOnCompleteListener((docu)->{
-                            if(docu.isSuccessful()){
-                                PlantHumidData tempData = docu.getResult().getDocuments().get(0).toObject(PlantHumidData.class);
-                                double humid = tempData.getHumidity();
-                                Log.d("습도",String.valueOf(humid));
-                                hashHumid.put(temp.getId(), humid);
+                        db.collection("dummyPlant").document(temp.getId()).collection("humidRecord").get().addOnCompleteListener((docu) -> {
+                            if (docu.isSuccessful()) {
+                                QuerySnapshot documentResult = docu.getResult();
+                                if (documentResult.isEmpty()) {
+
+                                } else {
+                                    PlantHumidData tempData = docu.getResult().getDocuments().get(0).toObject(PlantHumidData.class);
+                                    double humid = tempData.getHumidity();
+                                    Log.d("습도", String.valueOf(humid));
+                                    hashHumid.put(temp.getId(), humid);
+                                }
+
+                            } else {
+                                Log.d("TAG", "humid와 temp 오류");
                             }
                         });
 
                         db.collection("dummyPlant").document(temp.getId()).collection("tempRecord").get()
-                                .addOnCompleteListener((docu)->{
-                                    if(docu.isSuccessful()){
-                                        PlantTempData tempData = docu.getResult().getDocuments().get(0).toObject(PlantTempData.class);
-                                        double temper = tempData.getTemperature();
-                                        Log.d("온도",String.valueOf(temper));
-                                        hashTemp.put(temp.getId(), temper);
+                                .addOnCompleteListener((docu) -> {
+                                    if (docu.isSuccessful()) {
+                                        QuerySnapshot documentResult = docu.getResult();
+                                        if (documentResult.isEmpty()) {
+
+                                        } else {
+                                            PlantTempData tempData = docu.getResult().getDocuments().get(0).toObject(PlantTempData.class);
+                                            double temper = tempData.getTemperature();
+                                            Log.d("온도", String.valueOf(temper));
+                                            hashTemp.put(temp.getId(), temper);
+                                        }
+
+                                    } else {
+                                        Log.d("TAG", "humid와 temp 오류");
                                     }
                                 });
                     }
@@ -188,129 +205,35 @@ public class FriendPlantFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    public void setHumid(double humid){
-        viewHumid(humid,4000, 700);
-    }
-    public void setTemp(double temp){
-        viewTemp(temp, 25, 15);
+    public void setHumid(double humid) {
+        viewHumid(humid);
     }
 
-    void viewHumid(double value, int high, int low){
-        int v = -1;
+    public void setTemp(double temp) {
+        viewTemp(temp);
+    }
 
-        if(value < low) v = 4;
-        else if(value < low+(high-low)/3) v = 3;
-        else if(value < low+(high-low)/3*2) v = 2;
-        else if(value < high) v = 1;
-        else if(value >= high) v = 0;
-
-        switch(v){
-            case 0 :
-                binding.humid0.setVisibility(View.VISIBLE);
-                binding.humid1.setVisibility(View.GONE);
-                binding.humid2.setVisibility(View.GONE);
-                binding.humid3.setVisibility(View.GONE);
-                binding.humid4.setVisibility(View.GONE);
-                break;
-
-            case 1 :
-                binding.humid0.setVisibility(View.GONE);
-                binding.humid1.setVisibility(View.VISIBLE);
-                binding.humid2.setVisibility(View.GONE);
-                binding.humid3.setVisibility(View.GONE);
-                binding.humid4.setVisibility(View.GONE);
-                break;
-            case 2 :
-                binding.humid0.setVisibility(View.GONE);
-                binding.humid1.setVisibility(View.GONE);
-                binding.humid2.setVisibility(View.VISIBLE);
-                binding.humid3.setVisibility(View.GONE);
-                binding.humid4.setVisibility(View.GONE);
-                break;
-
-            case 3 :
-                binding.humid0.setVisibility(View.GONE);
-                binding.humid1.setVisibility(View.GONE);
-                binding.humid2.setVisibility(View.GONE);
-                binding.humid3.setVisibility(View.VISIBLE);
-                binding.humid4.setVisibility(View.GONE);
-                break;
-
-            case 4 :
-                binding.humid0.setVisibility(View.GONE);
-                binding.humid1.setVisibility(View.GONE);
-                binding.humid2.setVisibility(View.GONE);
-                binding.humid3.setVisibility(View.GONE);
-                binding.humid4.setVisibility(View.VISIBLE);
-                break;
-
-            default:
-                binding.humid0.setVisibility(View.GONE);
-                binding.humid1.setVisibility(View.GONE);
-                binding.humid2.setVisibility(View.GONE);
-                binding.humid3.setVisibility(View.GONE);
-                binding.humid4.setVisibility(View.GONE);
-                break;
+    void viewHumid(double value) {
+        if (value == -99999) {
+            binding.humidNo.setVisibility(View.VISIBLE);
+            binding.humidIndicator.setVisibility(View.GONE);
+            return;
+        } else {
+            binding.humidNo.setVisibility(View.GONE);
+            binding.humidIndicator.setVisibility(View.VISIBLE);
+            binding.humidIndicator.setValue((value - 700) / 3300);
         }
-
     }
 
-    void viewTemp(double value, int high, int low){
-        int v = -1;
-
-        if(value < low) v = 0;
-        else if(value < low+(high-low)/3) v = 1;
-        else if(value < low+(high-low)/3*2) v = 2;
-        else if(value < high) v = 3;
-        else if(value >= high) v = 4;
-
-        switch(v){
-            case 0 :
-                binding.temp0.setVisibility(View.VISIBLE);
-                binding.temp1.setVisibility(View.GONE);
-                binding.temp2.setVisibility(View.GONE);
-                binding.temp3.setVisibility(View.GONE);
-                binding.temp4.setVisibility(View.GONE);
-                break;
-
-            case 1 :
-                binding.temp0.setVisibility(View.GONE);
-                binding.temp1.setVisibility(View.VISIBLE);
-                binding.temp2.setVisibility(View.GONE);
-                binding.temp3.setVisibility(View.GONE);
-                binding.temp4.setVisibility(View.GONE);
-                break;
-            case 2 :
-                binding.temp0.setVisibility(View.GONE);
-                binding.temp1.setVisibility(View.GONE);
-                binding.temp2.setVisibility(View.VISIBLE);
-                binding.temp3.setVisibility(View.GONE);
-                binding.temp4.setVisibility(View.GONE);
-                break;
-
-            case 3 :
-                binding.temp0.setVisibility(View.GONE);
-                binding.temp1.setVisibility(View.GONE);
-                binding.temp2.setVisibility(View.GONE);
-                binding.temp3.setVisibility(View.VISIBLE);
-                binding.temp4.setVisibility(View.GONE);
-                break;
-
-            case 4 :
-                binding.temp0.setVisibility(View.GONE);
-                binding.temp1.setVisibility(View.GONE);
-                binding.temp2.setVisibility(View.GONE);
-                binding.temp3.setVisibility(View.GONE);
-                binding.temp4.setVisibility(View.VISIBLE);
-                break;
-
-            default:
-                binding.temp0.setVisibility(View.GONE);
-                binding.temp1.setVisibility(View.GONE);
-                binding.temp2.setVisibility(View.GONE);
-                binding.temp3.setVisibility(View.GONE);
-                binding.temp4.setVisibility(View.GONE);
-                break;
+    void viewTemp(double value) {
+        if (value == -99999) {
+            binding.tempNo.setVisibility(View.VISIBLE);
+            binding.tempIndicator.setVisibility(View.GONE);
+            return;
+        }else{
+            binding.tempNo.setVisibility(View.GONE);
+            binding.tempIndicator.setVisibility(View.VISIBLE);
+            binding.tempIndicator.setValue((value-15)/10);
         }
     }
 
