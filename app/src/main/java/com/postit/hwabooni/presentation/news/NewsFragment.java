@@ -1,5 +1,6 @@
 package com.postit.hwabooni.presentation.news;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,11 +11,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.postit.hwabooni.databinding.FragmentNewsBinding;
 import com.postit.hwabooni.model.News;
+import com.postit.hwabooni.presentation.signup.SignUpActivity;
 
 import java.util.ArrayList;
 
@@ -53,6 +56,15 @@ public class NewsFragment extends Fragment {
                     data.add(doc.toObject(News.class));
                 }
                 adapter.submitList(data);
+            }
+        });
+
+        binding.refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Intent intent = new Intent(requireContext(), SignUpActivity.class);
+                startActivity(intent);
+                binding.refreshLayout.setRefreshing(false);
             }
         });
     }
