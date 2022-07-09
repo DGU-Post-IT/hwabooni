@@ -1,5 +1,6 @@
 package com.postit.hwabooni.presentation.friend;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.postit.hwabooni.R;
@@ -17,6 +19,7 @@ import com.postit.hwabooni.databinding.FragmentFriendBinding;
 import com.postit.hwabooni.model.FriendData;
 import com.postit.hwabooni.presentation.emotionrecord.EmotionRecordFragment;
 import com.postit.hwabooni.presentation.friendplant.FriendPlantFragment;
+import com.postit.hwabooni.presentation.login.LoginActivity;
 
 import java.util.ArrayList;
 
@@ -25,6 +28,7 @@ public class FriendFragment extends Fragment {
     private static final String TAG = "FriendFragment";
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseAuth auth = FirebaseAuth.getInstance();
     FragmentFriendBinding binding;
     FriendListAdapter adapter;
 
@@ -43,6 +47,10 @@ public class FriendFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        if(auth.getCurrentUser()==null){
+            startActivity(new Intent(getContext(), LoginActivity.class));
+        }
 
         db.collection("dummyFriend").get().addOnCompleteListener((document)->{
             if(document.isSuccessful()){
