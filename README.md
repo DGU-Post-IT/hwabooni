@@ -1,6 +1,33 @@
 
 # 화분이(話盆이), hwabooni
 
+
+화분이(話盆이)는 독거어르신들의 우울증 예방 플랫폼입니다. IoT센서가 부착된 화분, 스마트 홈가든을 이용하여 어르신들의 대화량을 늘리고 커뮤니티를 형성합니다. 또한 IoT센서들을 통한 어르신들의 행동 데이터를 통해 이상징후를 파악할 수 있으며, 서비스 유지보수 및 이용교육을 통한 어르신들의 일자리 창출까지 기대할 수 있습니다.
+
+## Skill Stack
+- MVVM
+- rxJava
+- rxAndroid
+- ViewBinding
+- Firebase Authentication
+- Firebase Firestore
+- Firebase Storage
+
+## Library
+- Proportion Bar https://github.com/maxViolet/ProportionsBarLibrary
+
+## Features
+
+효°C 에서는:
+- 부모와 자녀의 연결.
+- 행동 인식 기반 알림 기능.
+- 매일 일상 기록 녹음 기능.
+- 하루 감정 체크 기능.
+- 부모님과 통화한 날을 체크해 주는 캘린더.
+- 부모님과 통화한 기록의 통계를 주별, 월별 보여주는 그래프.
+- 부모님의 감정 기록을 확인할 수 있는 차트
+- 이외의 계정 관리 기능 등이 있습니다.
+
 ![image](https://user-images.githubusercontent.com/86652565/178497121-2d82b7d5-7d37-4337-b47d-ae3f5459eede.png)
 ![image](https://user-images.githubusercontent.com/86652565/178497893-394a8aa4-ebb3-4e92-9b79-0ef2fecb600b.png)
 ![image](https://user-images.githubusercontent.com/86652565/178497899-cfbc779d-5c6c-40ea-b0ae-dc30c1ba6891.png)
