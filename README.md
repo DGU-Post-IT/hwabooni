@@ -1,4 +1,4 @@
-# hwabooni
+# 화분이(話盆이), hwabooni
 
 ![image](https://user-images.githubusercontent.com/86652565/178497121-2d82b7d5-7d37-4337-b47d-ae3f5459eede.png)
 ![image](https://user-images.githubusercontent.com/86652565/178497893-394a8aa4-ebb3-4e92-9b79-0ef2fecb600b.png)
