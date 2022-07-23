@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
             super.onBackPressed();
         }
     }
-
+/////////////////////////////////////////////
 //    public void InitializeLayout()
 //    {
 //        //toolBar를 통해 App Bar 생성
