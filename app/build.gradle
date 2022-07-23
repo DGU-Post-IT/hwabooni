@@ -57,4 +57,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     implementation "androidx.coordinatorlayout:coordinatorlayout:1.2.0"
+    implementation "androidx.drawerlayout:drawerlayout:1.1.1"
 }

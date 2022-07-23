@@ -15,6 +15,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.postit.hwabooni.R;
 import com.postit.hwabooni.databinding.FragmentNewsBinding;
 import com.postit.hwabooni.model.News;
 import com.postit.hwabooni.presentation.signup.SignUpActivity;
@@ -44,7 +45,9 @@ public class NewsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        
+        View temp = view.findViewById(R.id.toolBar);
+        if(temp==null) Log.d(TAG, "onViewCreated: strange");
         adapter = new NewsRecyclerViewAdapter();
         binding.newsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
         binding.newsRecyclerView.setAdapter(adapter);
