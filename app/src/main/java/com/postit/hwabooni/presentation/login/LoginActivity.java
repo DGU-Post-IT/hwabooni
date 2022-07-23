@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.postit.hwabooni.BuildConfig;
+import com.postit.hwabooni.MainActivity;
 import com.postit.hwabooni.databinding.ActivityLoginBinding;
 import com.postit.hwabooni.presentation.signup.SignUpActivity;
 
@@ -130,4 +131,12 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if(auth.getCurrentUser()!=null){
+            setResult(1000);
+            finish();
+        }
+    }
 }
