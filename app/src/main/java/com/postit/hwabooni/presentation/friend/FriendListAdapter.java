@@ -40,11 +40,28 @@ public class FriendListAdapter extends RecyclerView.Adapter {
 
     private View.OnClickListener listener;
 
+    private View.OnClickListener logoutListener;
+
+    public void setMyName(String myName) {
+        this.myName = myName;
+    }
+
+    private String myName = "";
+
     public void setListener(View.OnClickListener listener) {
         this.listener = listener;
     }
 
+    public void setLogoutListener(View.OnClickListener listener) {
+        this.logoutListener = listener;
+    }
+
     public void setFriendClickListener(FriendClickListener listener){this.friendClickListener=listener;}
+
+    public FriendListAdapter(Context context) {
+        this.friend = new ArrayList<>();
+        this.context = context;
+    }
 
     public FriendListAdapter(ArrayList<FriendData> friend, Context context) {
         this.friend = friend;
@@ -74,9 +91,10 @@ public class FriendListAdapter extends RecyclerView.Adapter {
         if (holder instanceof HeaderViewHolder) {
             HeaderViewHolder headerViewHolder = (HeaderViewHolder) holder;
             final FriendRecyclerviewHeaderBinding binding = headerViewHolder.binding;
+            binding.myName.setText(myName);
             binding.helperName.setText("사회복지사분 성함");
             if (listener != null) binding.emotionRecordButton.setOnClickListener(listener);
-
+            if(logoutListener!=null) binding.logoutButton.setOnClickListener(logoutListener);
         } else {
             position -= 1;
             FriendViewHolder itemViewHolder = (FriendViewHolder) holder;
@@ -146,4 +164,7 @@ public class FriendListAdapter extends RecyclerView.Adapter {
         return friend.size() + 1;
     }
 
+    public void setFriend(ArrayList<FriendData> friend){
+        this.friend = friend;
+    }
 }
