@@ -11,14 +11,14 @@ public class User {
     ArrayList<String> requested;
     String phone;
     //Date birthdate;
-    int sex;
+    String sex;
     int age;
     String address;
     String fcm;
 
     public User() {    }
 
-    public User(String name, String phone, int age, String email, int sex, String address) {
+    public User(String name, String phone, int age, String email, String sex, String address) {
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -90,11 +90,11 @@ public class User {
         this.requested = requested;
     }
 
-    public int getSex() {
+    public String getSex() {
         return sex;
     }
 
-    public void setSex(int sex) {
+    public void setSex(String sex) {
         this.sex = sex;
     }
 }
