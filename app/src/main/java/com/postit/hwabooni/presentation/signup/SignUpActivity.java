@@ -104,8 +104,8 @@ public class SignUpActivity extends AppCompatActivity {
         user.setAge(Integer.parseInt(binding.tvAge.getText().toString()));
         user.setName(binding.tvName.getText().toString());
         user.setPhone(binding.tvPhonenumber.getText().toString());
-        if(male == true) user.setSex(1);
-        else user.setSex(2);
+        if(male == true) user.setSex("남");
+        else user.setSex("여");
 
 
         db.collection("User").document(id)
@@ -120,7 +120,7 @@ public class SignUpActivity extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d("SignUpActivity", "회원가입 후 DB 생성 성공");
+                        Log.d("SignUpActivity", "회원가입 후 DB 생성 실패");
                         Log.w("upload!!", "Error writing document", e);
                     }
                 });
