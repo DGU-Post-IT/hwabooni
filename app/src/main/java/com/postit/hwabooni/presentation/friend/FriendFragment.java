@@ -1,4 +1,6 @@
 package com.postit.hwabooni.presentation.friend;
+import com.postit.hwabooni.MainActivity;
+import com.postit.hwabooni.MainActivity.*;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -38,6 +40,7 @@ public class FriendFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
