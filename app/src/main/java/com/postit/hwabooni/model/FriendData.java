@@ -69,6 +69,17 @@ public class FriendData {
         return phone;
     }
 
+    public FriendData(String name) {
+        this.name = name;
+    }
 
+    public FriendData() {
+    }
 
+    public FriendData(String name, String plantImage, String emotion, String phone) {
+        this.name = name;
+        this.plantImage = plantImage;
+        this.emotion = emotion;
+        this.phone = phone;
+    }
 }
