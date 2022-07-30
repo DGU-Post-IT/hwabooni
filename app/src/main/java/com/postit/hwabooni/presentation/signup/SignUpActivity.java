@@ -36,7 +36,7 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivitySignupBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        auth = FirebaseAuth.getInstance();
+
         db = FirebaseFirestore.getInstance();
 
         binding.maleButton.setOnClickListener((v) -> {
@@ -54,6 +54,15 @@ public class SignUpActivity extends AppCompatActivity {
             male = false;
         });
 
+        auth = FirebaseAuth.getInstance();
+//        if(auth.getCurrentUser()==null){
+//            Log.d("TAG", "현재 null");
+//            //auth.signOut();
+//        }
+//        if(auth.getCurrentUser()!=null){
+//            Log.d("TAG", "현재 notnull");
+//            auth.signOut();
+//        }
 
         binding.signUpButton.setOnClickListener(view -> {
             signup();
@@ -92,10 +101,12 @@ public class SignUpActivity extends AppCompatActivity {
         User user = new User();
         user.setAddress(binding.tvAddress.getText().toString());
         user.setEmail(id);
+        user.setAge(Integer.parseInt(binding.tvAge.getText().toString()));
         user.setName(binding.tvName.getText().toString());
         user.setPhone(binding.tvPhonenumber.getText().toString());
-        if (male == true) user.setSex(1);
-        else user.setSex(2);
+
+        if(male == true) user.setSex("남");
+        else user.setSex("여");
 
         db.collection("User").document(id)
                 .set(user, SetOptions.merge())
@@ -109,7 +120,7 @@ public class SignUpActivity extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d("SignUpActivity", "회원가입 후 DB 생성 성공");
+                        Log.d("SignUpActivity", "회원가입 후 DB 생성 실패");
                         Log.w("upload!!", "Error writing document", e);
                     }
                 });
