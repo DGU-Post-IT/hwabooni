@@ -17,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -26,6 +28,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.postit.hwabooni.R;
+import com.postit.hwabooni.data.repository.FriendRepository;
 import com.postit.hwabooni.databinding.FragmentFriendBinding;
 import com.postit.hwabooni.model.FriendData;
 import com.postit.hwabooni.model.User;
@@ -43,6 +46,8 @@ public class FriendFragment extends Fragment {
     FirebaseAuth auth = FirebaseAuth.getInstance();
     FragmentFriendBinding binding;
     FriendListAdapter adapter;
+
+    MutableLiveData<ArrayList<FriendData>> friendsList = new MutableLiveData<>(new ArrayList<>());
 
     ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
@@ -74,20 +79,30 @@ public class FriendFragment extends Fragment {
 
         initRecyclerView();
 
+        friendsList.observe(getActivity(), data -> {
+            adapter.setFriend(data);
+            adapter.notifyDataSetChanged();
+        });
+
         if(auth.getCurrentUser()!=null){
 
-            db.collection("User").document(auth.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            db.collection("User").document(auth.getUid()).get().addOnSuccessListener(documentSnapshot -> {
+                if(documentSnapshot == null){
 
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    if(documentSnapshot == null){
+                }else{
+                    User user = documentSnapshot.toObject(User.class);
+                    adapter.setMyName(user==null?"null":user.getName());
 
-                    }else{
-                        User user = documentSnapshot.toObject(User.class);
-                        adapter.setMyName(user==null?"null":user.getName());
+                    if(user.getFollower()!=null){
+                        new FriendRepository().getFriendsData(user.getFollower(),(data)->{
+                            Log.d(TAG, "onViewCreated: callback");
+                            Log.d(TAG, "onViewCreated: callback" + data);
+                            adapter.setFriend(data);
+                            adapter.notifyDataSetChanged();
+                        });
                     }
-                }
 
+                }
             });
 
         }

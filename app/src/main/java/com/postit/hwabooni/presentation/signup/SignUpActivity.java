@@ -30,6 +30,7 @@ public class SignUpActivity extends AppCompatActivity {
     FirebaseAuth auth;
     FirebaseFirestore db;
     boolean male = true;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,15 +39,15 @@ public class SignUpActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
 
-        binding.maleButton.setOnClickListener((v)->{
-            if(binding.maleButton.isChecked()) {
+        binding.maleButton.setOnClickListener((v) -> {
+            if (binding.maleButton.isChecked()) {
                 binding.maleButton.setTextColor(Color.WHITE);
                 binding.femaleButton.setTextColor(getColor(android.R.color.holo_red_light));
             }
             male = true;
         });
-        binding.femaleButton.setOnClickListener((v)->{
-            if(binding.femaleButton.isChecked()) {
+        binding.femaleButton.setOnClickListener((v) -> {
+            if (binding.femaleButton.isChecked()) {
                 binding.femaleButton.setTextColor(Color.WHITE);
                 binding.maleButton.setTextColor(getColor(android.R.color.holo_red_light));
             }
@@ -63,7 +64,6 @@ public class SignUpActivity extends AppCompatActivity {
 //            auth.signOut();
 //        }
 
-
         binding.signUpButton.setOnClickListener(view -> {
             signup();
         });
@@ -72,28 +72,28 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
 
-    void signup(){
+    void signup() {
 
         String id = binding.tvEmail.getText().toString();
         String password = binding.tvPhonenumber.getText().toString();
 
-        if(!id.matches("^(.+)@(.+)$")){
-            Toast.makeText(this,"올바른 이메일 형식을 입력하세요.",Toast.LENGTH_SHORT).show();
+        if (!id.matches("^(.+)@(.+)$")) {
+            Toast.makeText(this, "올바른 이메일 형식을 입력하세요.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        auth.createUserWithEmailAndPassword(id,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+        auth.createUserWithEmailAndPassword(id, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
-                    Toast.makeText(getApplicationContext(),"계정을 성공적으로 생성하였습니다.",Toast.LENGTH_SHORT).show();
+                if (task.isSuccessful()) {
+                    Toast.makeText(getApplicationContext(), "계정을 성공적으로 생성하였습니다.", Toast.LENGTH_SHORT).show();
                     Log.d("SignUpActivity", "회원가입성공");
                     //Intent intent = new Intent(getApplicationContext(), MyInfoActivity.class);
                     //startActivity(intent);
                     //finish();
-                }else{
+                } else {
                     Log.d("SignUpActivity", "회원가입실패");
-                    Toast.makeText(getApplicationContext(),"계정 생성에 실패하였습니다..",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "계정 생성에 실패하였습니다..", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -104,9 +104,9 @@ public class SignUpActivity extends AppCompatActivity {
         user.setAge(Integer.parseInt(binding.tvAge.getText().toString()));
         user.setName(binding.tvName.getText().toString());
         user.setPhone(binding.tvPhonenumber.getText().toString());
+
         if(male == true) user.setSex("남");
         else user.setSex("여");
-
 
         db.collection("User").document(id)
                 .set(user, SetOptions.merge())
@@ -124,7 +124,6 @@ public class SignUpActivity extends AppCompatActivity {
                         Log.w("upload!!", "Error writing document", e);
                     }
                 });
-
 
     }
 }
