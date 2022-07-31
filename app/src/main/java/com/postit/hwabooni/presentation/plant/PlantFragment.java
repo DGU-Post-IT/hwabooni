@@ -85,7 +85,6 @@ public class PlantFragment extends Fragment {
                 plantAdapter.notifyDataSetChanged();
             }
         });
-
     }
 
     void loadPlantInfo(PlantData plant){
@@ -95,6 +94,7 @@ public class PlantFragment extends Fragment {
                 .orderBy("timestamp")
                 .limit(1).get().addOnCompleteListener((task)->{
                    if(task.isSuccessful()){
+                       //Log.d(TAG, "loadPlantInfo: 성공");
                        if(task.getResult()!=null){
                            PlantRecord record = task.getResult().toObjects(PlantRecord.class).get(0);
                            showPlantInfo(plant,record);
@@ -130,7 +130,10 @@ public class PlantFragment extends Fragment {
         } else {
             binding.humidNo.setVisibility(View.GONE);
             binding.humidIndicator.setVisibility(View.VISIBLE);
-            binding.humidIndicator.setValue((value - 700) / 3300);
+            Log.d(TAG, "setHumid: "+value);
+            if(value <= 700) binding.humidIndicator.setValue(0.999);
+            if(value >= 4000) binding.humidIndicator.setValue(0.001);
+            else binding.humidIndicator.setValue(1-(value - 700)/3300);
         }
     }
 
@@ -142,7 +145,10 @@ public class PlantFragment extends Fragment {
         }else{
             binding.tempNo.setVisibility(View.GONE);
             binding.tempIndicator.setVisibility(View.VISIBLE);
-            binding.tempIndicator.setValue((value-15)/10);
+            Log.d(TAG, "setTemp: "+value);
+            if(value <= 15) binding.humidIndicator.setValue(0.999);
+            if(value >= 25) binding.humidIndicator.setValue(0.001);
+            else binding.tempIndicator.setValue((value-15)/10);
         }
     }
 }
