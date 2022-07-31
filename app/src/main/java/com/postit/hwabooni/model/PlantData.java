@@ -1,14 +1,13 @@
 package com.postit.hwabooni.model;
 
-import android.widget.TextView;
 import com.google.firebase.firestore.DocumentId;
 
 public class PlantData {
 
     @DocumentId
     String id;
-    String myPlantName;
-    String myPlantPicture;
+    String name;
+    String picture;
     String prettyWord;
 
     public PlantData() {
@@ -16,8 +15,8 @@ public class PlantData {
     }
 
     public PlantData(String n, String p) {
-        myPlantName = n;
-        myPlantPicture = p;
+        name = n;
+        picture = p;
     }
 
 
@@ -30,12 +29,12 @@ public class PlantData {
     }
 
 
-    public String getMyPlantPicture() {
-        return myPlantPicture;
+    public String getPicture() {
+        return picture;
     }
 
-    public void setMyPlantPicture(String myPlantPicture) {
-        this.myPlantPicture = myPlantPicture;
+    public void setPicture(String picture) {
+        this.picture = picture;
     }
 
 
@@ -49,11 +48,11 @@ public class PlantData {
         this.id = id;
     }
 
-    public String getmyPlantName() {
-        return myPlantName;
+    public String getName() {
+        return name;
     }
 
-    public void setmyPlantName(String myPlantName) {
-        this.myPlantName = myPlantName;
+    public void setName(String myPlantName) {
+        this.name = myPlantName;
     }
 }

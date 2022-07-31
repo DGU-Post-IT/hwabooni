@@ -26,7 +26,7 @@ import java.util.ArrayList;
 public class FriendListAdapter extends RecyclerView.Adapter {
 
     interface FriendClickListener {
-        void onClick(String name);
+        void onClick(String name,String email);
     }
 
     private FriendClickListener friendClickListener;
@@ -102,6 +102,7 @@ public class FriendListAdapter extends RecyclerView.Adapter {
             FriendViewHolder itemViewHolder = (FriendViewHolder) holder;
             final CardviewFriendBinding binding = itemViewHolder.binding;
             String friendName = friend.get(position).getName();
+            String friendEmail = friend.get(position).getEmail();
             binding.friendName.setText(friendName);
 
             Drawable drawable = AppCompatResources.getDrawable(binding.getRoot().getContext(), Emotion.values()[Integer.parseInt(friend.get(position).getEmotion())].getIcon());
@@ -118,7 +119,7 @@ public class FriendListAdapter extends RecyclerView.Adapter {
 
             binding.getRoot().setOnClickListener((v) -> {
                 if (friendClickListener == null) return;
-                friendClickListener.onClick(friendName);
+                friendClickListener.onClick(friendName,friendEmail);
             });
 
             binding.friendCallButton.setOnClickListener((v) -> {

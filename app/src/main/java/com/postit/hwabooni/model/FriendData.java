@@ -13,7 +13,15 @@ public class FriendData {
     String emotion;
     String phone;
     long time;
+    String email;
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public String getId() {
         return id;

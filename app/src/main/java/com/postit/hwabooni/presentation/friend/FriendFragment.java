@@ -129,9 +129,10 @@ public class FriendFragment extends Fragment {
 //            }
             launcher.launch(new Intent(getContext(), LoginActivity.class));
         });
-        adapter.setFriendClickListener((name)->{
+        adapter.setFriendClickListener((name,email)->{
             Bundle bundle = new Bundle();
             bundle.putString(FriendPlantFragment.FRIEND_NAME_CODE,name);
+            bundle.putString(FriendPlantFragment.FRIEND_EMAIL_CODE,email);
             FriendPlantFragment fragment = new FriendPlantFragment();
             fragment.setArguments(bundle);
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,fragment).addToBackStack(null).commit();
