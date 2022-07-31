@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.settingSideNavBar();
+        //this.settingSideNavBar();
 
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());

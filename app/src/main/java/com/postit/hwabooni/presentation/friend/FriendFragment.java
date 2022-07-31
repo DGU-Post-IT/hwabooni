@@ -86,7 +86,7 @@ public class FriendFragment extends Fragment {
 
         if(auth.getCurrentUser()!=null){
 
-            db.collection("User").document(auth.getUid()).get().addOnSuccessListener(documentSnapshot -> {
+            db.collection("User").document(auth.getCurrentUser().getEmail()).get().addOnSuccessListener(documentSnapshot -> {
                 if(documentSnapshot == null){
 
                 }else{
