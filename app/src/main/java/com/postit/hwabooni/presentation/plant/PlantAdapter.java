@@ -4,12 +4,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.postit.hwabooni.R;
+import com.postit.hwabooni.databinding.PlantListBinding;
 import com.postit.hwabooni.model.PlantData;
 
 import java.util.ArrayList;
@@ -23,27 +23,23 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.CustomViewHo
     public PlantAdapter(ArrayList<PlantData> arrayList) {
         this.arrayList = arrayList;
     }
-    //Test
 
     @NonNull
     @Override
     public PlantAdapter.CustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.plant_list, parent, false);
-        CustomViewHolder holder = new CustomViewHolder(view);
-
-        return holder;
+        return new CustomViewHolder(PlantListBinding.inflate(LayoutInflater.from(parent.getContext()),parent,false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull PlantAdapter.CustomViewHolder holder, int position) {
-        holder.tv_plant.setText(arrayList.get(position).getmyPlantName());
-        holder.id = arrayList.get(position).getId();
 
+        holder.bind(arrayList.get(position));
+
+        holder.id = arrayList.get(position).getId();
 
         holder.itemView.setTag(position);
         holder.itemView.setOnClickListener((v)->{
-            if(listener!=null) listener.onClick(holder.id);
+            if(listener!=null) listener.onClick(holder.id,arrayList.get(position));
         });
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -71,17 +67,21 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.CustomViewHo
 
     public class CustomViewHolder extends RecyclerView.ViewHolder {
 
-        protected TextView tv_plant;
         String id;
 
-        public CustomViewHolder(@NonNull View itemView) {
-            super(itemView);
+        PlantListBinding binding;
 
-            this.tv_plant = (TextView) itemView.findViewById(R.id.tv_plant);
+        public CustomViewHolder(@NonNull PlantListBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
+
+        void bind(PlantData data){
+            binding.tvPlant.setText(data.getName());
         }
     }
 
     interface OnClickListener{
-        void onClick(String id);
+        void onClick(String id, PlantData plant);
     }
 }
