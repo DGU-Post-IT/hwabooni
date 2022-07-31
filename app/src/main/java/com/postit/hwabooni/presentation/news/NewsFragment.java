@@ -1,6 +1,5 @@
 package com.postit.hwabooni.presentation.news;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,63 +10,87 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.postit.hwabooni.R;
+import com.postit.hwabooni.data.repository.EventRepository;
+import com.postit.hwabooni.data.repository.FriendRepository;
+import com.postit.hwabooni.data.repository.PlantRepository;
 import com.postit.hwabooni.databinding.FragmentNewsBinding;
+import com.postit.hwabooni.model.FriendData;
 import com.postit.hwabooni.model.News;
-import com.postit.hwabooni.presentation.signup.SignUpActivity;
+import com.postit.hwabooni.model.PlantData;
+import com.postit.hwabooni.model.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class NewsFragment extends Fragment {
 
     private static final String TAG = "NewsFragment";
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseAuth auth = FirebaseAuth.getInstance();
 
     FragmentNewsBinding binding;
     NewsRecyclerViewAdapter adapter;
+
+    User me;
+    ArrayList<FriendData> friendDataList;
+    HashMap<String, String> friendsNameMap;
+    HashMap<String, PlantData> friendsPlantMap;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = FragmentNewsBinding.inflate(inflater,container,false);
+        binding = FragmentNewsBinding.inflate(inflater, container, false);
         return binding.getRoot();
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        
+        friendsNameMap = new HashMap<>();
+        friendDataList = new ArrayList<>();
+
         View temp = view.findViewById(R.id.toolBar);
-        if(temp==null) Log.d(TAG, "onViewCreated: strange");
+        if (temp == null) Log.d(TAG, "onViewCreated: strange");
         adapter = new NewsRecyclerViewAdapter();
-        binding.newsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+        binding.newsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         binding.newsRecyclerView.setAdapter(adapter);
 
-        db.collection("dummy").get().addOnCompleteListener((document)->{
-            if(document.isSuccessful()){
-                ArrayList<News> data = new ArrayList<>();
-                for (DocumentSnapshot doc : document.getResult().getDocuments()){
-                    data.add(doc.toObject(News.class));
-                }
-                adapter.submitList(data);
-            }
+        binding.refreshLayout.setOnRefreshListener(() -> {
+            binding.refreshLayout.setRefreshing(false);
         });
 
-        binding.refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-//                Intent intent = new Intent(requireContext(), SignUpActivity.class);
-//                startActivity(intent);
-                binding.refreshLayout.setRefreshing(false);
+        db.collection("User").document(auth.getCurrentUser().getEmail()).get().addOnCompleteListener((task) -> {
+            if (task.isSuccessful()) {
+                me = task.getResult().toObject(User.class);
+                new FriendRepository().getFriendsData(me.getFollower(), (data) -> {
+                    friendDataList = data;
+                    for (FriendData friendData : data) {
+                        friendsNameMap.put(friendData.getId(), friendData.getName());
+                    }
+                    new PlantRepository().getFriendsPlantList(data, (friendsPlantMap) -> {
+                        this.friendsPlantMap = friendsPlantMap;
+                        new EventRepository().getEventList(friendDataList, (newsList) -> {
+                            for (News news : newsList) {
+                                if (news.getType() == 1 || news.getType() == 2) {
+                                    news.setName(friendsNameMap.get(news.getEmail()));
+                                    PlantData plantData = friendsPlantMap.get(news.getEmail() + "/" + news.getData());
+                                    Log.d(TAG, "onViewCreated: " + plantData);
+                                    if (plantData != null) {
+                                        Log.d(TAG, "onViewCreated: " + plantData);
+                                        news.setData(plantData.getName());
+                                        news.setPicture(plantData.getPicture());
+                                    }
+                                }
+                            }
+                            adapter.submitList(newsList);
+                        });
+                    });
+                });
             }
         });
     }

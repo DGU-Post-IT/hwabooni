@@ -1,6 +1,4 @@
 package com.postit.hwabooni.presentation.friend;
-import com.postit.hwabooni.MainActivity;
-import com.postit.hwabooni.MainActivity.*;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,14 +16,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.postit.hwabooni.R;
 import com.postit.hwabooni.data.repository.FriendRepository;
@@ -35,7 +28,6 @@ import com.postit.hwabooni.model.User;
 import com.postit.hwabooni.presentation.emotionrecord.EmotionRecordFragment;
 import com.postit.hwabooni.presentation.friendplant.FriendPlantFragment;
 import com.postit.hwabooni.presentation.login.LoginActivity;
-import com.postit.hwabooni.presentation.plant.PlantAddFragment;
 
 import java.util.ArrayList;
 
