@@ -76,15 +76,7 @@ public class FriendFragment extends Fragment {
         if(auth.getCurrentUser()==null){
             launcher.launch(new Intent(getContext(), LoginActivity.class));
         }
-
-        initRecyclerView();
-
-        friendsList.observe(getActivity(), data -> {
-            adapter.setFriend(data);
-            adapter.notifyDataSetChanged();
-        });
-
-        if(auth.getCurrentUser()!=null){
+        else {
 
             db.collection("User").document(auth.getCurrentUser().getEmail()).get().addOnSuccessListener(documentSnapshot -> {
                 if(documentSnapshot == null){
@@ -92,7 +84,9 @@ public class FriendFragment extends Fragment {
                 }else{
                     User user = documentSnapshot.toObject(User.class);
                     //Log.d("user이름", user.getName());
+                    initRecyclerView();
                     adapter.setMyName(user==null?"null":user.getName());
+
 
                     if(user.getFollower()!=null){
                         new FriendRepository().getFriendsData(user.getFollower(),(data)->{
@@ -102,9 +96,19 @@ public class FriendFragment extends Fragment {
                             adapter.notifyDataSetChanged();
                         });
                     }
+                    friendsList.observe(getActivity(), data -> {
+                        adapter.setFriend(data);
+                        adapter.notifyDataSetChanged();
+                    });
 
                 }
             });
+
+
+
+
+
+
 
         }
 
