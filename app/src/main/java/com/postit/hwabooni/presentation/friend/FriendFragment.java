@@ -35,6 +35,7 @@ import com.postit.hwabooni.model.User;
 import com.postit.hwabooni.presentation.emotionrecord.EmotionRecordFragment;
 import com.postit.hwabooni.presentation.friendplant.FriendPlantFragment;
 import com.postit.hwabooni.presentation.login.LoginActivity;
+import com.postit.hwabooni.presentation.plant.PlantAddFragment;
 
 import java.util.ArrayList;
 
@@ -87,7 +88,6 @@ public class FriendFragment extends Fragment {
                     initRecyclerView();
                     adapter.setMyName(user==null?"null":user.getName());
 
-
                     if(user.getFollower()!=null){
                         new FriendRepository().getFriendsData(user.getFollower(),(data)->{
                             Log.d(TAG, "onViewCreated: callback");
@@ -104,12 +104,6 @@ public class FriendFragment extends Fragment {
                 }
             });
 
-
-
-
-
-
-
         }
 
 
@@ -121,12 +115,7 @@ public class FriendFragment extends Fragment {
         adapter.setListener((v)->{
             new EmotionRecordFragment().show(requireActivity().getSupportFragmentManager(), "EMOTION_RECORD");
         });
-        adapter.setLogoutListener((v)->{
-//            if(auth.getCurrentUser()!=null){
-//                Log.d(TAG, "onViewCreated: logout button clicked");
-//                auth.signOut();
-//                refreshFragment();
-//            }
+        adapter.setMypageListener((v)->{
             launcher.launch(new Intent(getContext(), LoginActivity.class));
         });
         adapter.setFriendClickListener((name,email)->{
@@ -138,6 +127,13 @@ public class FriendFragment extends Fragment {
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,fragment).addToBackStack(null).commit();
         });
         binding.friendRecyclerView.setAdapter(adapter);
+
+        adapter.setFriendAddListener(view -> {
+            //launcher.launch(new Intent(getContext(), FriendAddFragment.class));
+            new FriendAddFragment().show(requireActivity().getSupportFragmentManager(), "Friend_Add");
+        });
+
+
     }
 
     void refreshFragment(){

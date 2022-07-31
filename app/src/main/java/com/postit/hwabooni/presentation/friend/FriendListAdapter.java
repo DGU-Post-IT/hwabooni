@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.google.api.LogDescriptor;
 import com.postit.hwabooni.databinding.CardviewFriendBinding;
 import com.postit.hwabooni.databinding.FriendRecyclerviewHeaderBinding;
 import com.postit.hwabooni.model.Emotion;
@@ -41,20 +42,32 @@ public class FriendListAdapter extends RecyclerView.Adapter {
 
     private View.OnClickListener listener;
 
-    private View.OnClickListener logoutListener;
+    private View.OnClickListener mypageListener;
+
+    private View.OnClickListener friendAddListener;
+
+    private View.OnClickListener friendDeleteListener;
 
     public void setMyName(String myName) {
         this.myName = myName;
     }
 
-    private String myName = "";
+    private String myName = "이름없음";
 
     public void setListener(View.OnClickListener listener) {
         this.listener = listener;
     }
 
-    public void setLogoutListener(View.OnClickListener listener) {
-        this.logoutListener = listener;
+    public void setMypageListener(View.OnClickListener listener) {
+        this.mypageListener = listener;
+    }
+
+    public void setFriendAddListener(View.OnClickListener listener) {
+        this.friendAddListener = listener;
+    }
+
+    public void setFriendDeleteListener(View.OnClickListener listener) {
+        this.friendDeleteListener = listener;
     }
 
     public void setFriendClickListener(FriendClickListener listener){this.friendClickListener=listener;}
@@ -96,7 +109,9 @@ public class FriendListAdapter extends RecyclerView.Adapter {
             binding.myName.setText(myName);
             binding.helperName.setText("사회복지사분 성함");
             if (listener != null) binding.emotionRecordButton.setOnClickListener(listener);
-            if(logoutListener!=null) binding.logoutButton.setOnClickListener(logoutListener);
+            if (mypageListener!=null) binding.infoButton.setOnClickListener(mypageListener);
+            if (friendAddListener!=null) binding.friendAddButton.setOnClickListener(friendAddListener);
+
         } else {
             position -= 1;
             FriendViewHolder itemViewHolder = (FriendViewHolder) holder;
@@ -105,8 +120,13 @@ public class FriendListAdapter extends RecyclerView.Adapter {
             String friendEmail = friend.get(position).getEmail();
             binding.friendName.setText(friendName);
 
-            Drawable drawable = AppCompatResources.getDrawable(binding.getRoot().getContext(), Emotion.values()[Integer.parseInt(friend.get(position).getEmotion())].getIcon());
-            binding.friendEmotionView.setImageDrawable(drawable);
+            if(friend.get(position).getEmotion()!=null){
+                Log.d("현재친구", friend.get(position).getName().toString());
+                Log.d("해당친구 감정", friend.get(position).getEmotion());
+                Drawable drawable = AppCompatResources.getDrawable(binding.getRoot().getContext(), Emotion.values()[Integer.parseInt(friend.get(position).getEmotion())].getIcon());
+                binding.friendEmotionView.setImageDrawable(drawable);
+            }
+
 
             binding.plantImageView.setVisibility(View.VISIBLE);
             Glide.with(binding.getRoot())
@@ -118,6 +138,7 @@ public class FriendListAdapter extends RecyclerView.Adapter {
             String phoneNumber = "tel:" + friend.get(position).getPhone();
 
             binding.getRoot().setOnClickListener((v) -> {
+                Log.d("", "click됨");
                 if (friendClickListener == null) return;
                 friendClickListener.onClick(friendName,friendEmail);
             });

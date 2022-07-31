@@ -60,7 +60,7 @@
         android:background="@drawable/login_button_dirty"
         android:text="로그인"
         android:textColor="@color/white"
-        android:textSize="28sp"
+        android:textSize="35sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="6:1"
         app:layout_constraintEnd_toEndOf="parent"
@@ -83,8 +83,9 @@
             android:background="@null"
             android:text="회원가입"
             android:textColor="@color/orange"
-            android:textSize="24sp"
-            android:layout_marginBottom="5dp"/>
+            android:textSize="30sp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="20dp"/>
         <View
             android:id="@+id/button_divider_view"
             android:layout_width="1dp"
@@ -99,7 +100,8 @@
             android:layout_height="wrap_content"
             android:background="@null"
             android:text="비밀번호 찾기"
-            android:textSize="24sp"/>
+            android:textColor="@color/orange"
+            android:textSize="30sp"/>
     </LinearLayout>
     <LinearLayout
         android:id="@+id/account_info_button_layout"
@@ -116,12 +118,14 @@
             android:layout_height="wrap_content"
             android:background="@null"
             android:text="회원 정보 수정"
-            android:textSize="24sp"
+            android:textSize="30sp"
             tools:visibility="visible"
             android:textColor="@color/orange"
+            android:layout_marginBottom="20dp"
             app:layout_constraintBottom_toTopOf="@id/login_button"
             app:layout_constraintEnd_toEndOf="@id/login_button"
-            app:layout_constraintStart_toStartOf="@id/login_button" />
+            app:layout_constraintStart_toStartOf="@id/login_button"
+            android:visibility="gone"/>
         <View
             android:layout_width="1dp"
             android:layout_height="0dp"
@@ -130,13 +134,15 @@
             android:paddingVertical="7dp" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/parent_find_button"
+            android:id="@+id/friend_manage_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@null"
-            android:text="부모님 연동하기"
+            android:text="친구 관리"
+            android:textColor="@color/orange"
             android:textSize="24sp"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            />
     </LinearLayout>
 
 
