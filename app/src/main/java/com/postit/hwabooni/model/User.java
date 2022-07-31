@@ -7,6 +7,10 @@ public class User {
 
     String name;
     String email;
+
+
+
+    String emotion;
     ArrayList<String> follower;
     ArrayList<String> requested;
     String phone;
@@ -72,6 +76,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getEmotion() {
+        return emotion;
+    }
+
+    public void setEmotion(String emotion) {
+        this.emotion = emotion;
     }
 
     public ArrayList<String> getFollower() {
