@@ -20,7 +20,6 @@ android {
         buildConfigField "String", "SERVER_CLIENT_ID",localProperties['SERVER_CLIENT_ID']
     }
 
-
     buildTypes {
         release {
             minifyEnabled false

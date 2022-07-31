@@ -30,6 +30,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    boolean firstlogin = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,6 +84,7 @@ public class LoginActivity extends AppCompatActivity {
             binding.accountInfoButtonLayout.setVisibility(View.VISIBLE);
             binding.accountButtonLayout.setVisibility(View.GONE);
             binding.loginButton.setText("로그아웃");
+            if(firstlogin == true) finish();
         }
     }
 
@@ -119,6 +121,7 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = auth.getCurrentUser();
+                            firstlogin = true;
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.

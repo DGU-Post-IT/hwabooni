@@ -117,11 +117,12 @@ public class FriendFragment extends Fragment {
             new EmotionRecordFragment().show(requireActivity().getSupportFragmentManager(), "EMOTION_RECORD");
         });
         adapter.setLogoutListener((v)->{
-            if(auth.getCurrentUser()!=null){
-                Log.d(TAG, "onViewCreated: logout button clicked");
-                auth.signOut();
-                refreshFragment();
-            }
+//            if(auth.getCurrentUser()!=null){
+//                Log.d(TAG, "onViewCreated: logout button clicked");
+//                auth.signOut();
+//                refreshFragment();
+//            }
+            launcher.launch(new Intent(getContext(), LoginActivity.class));
         });
         adapter.setFriendClickListener((name)->{
             Bundle bundle = new Bundle();
