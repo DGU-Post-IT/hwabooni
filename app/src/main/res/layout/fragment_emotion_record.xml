@@ -25,36 +25,42 @@
             />
 
         <ImageView
+            android:id="@+id/happy_button"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:src="@drawable/button_good"
             />
 
         <ImageView
+            android:id="@+id/sad_button"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:src="@drawable/button_sad"
             />
 
         <ImageView
+            android:id="@+id/angry_button"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:src="@drawable/button_angry"
             />
 
         <ImageView
+            android:id="@+id/nervous_button"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:src="@drawable/button_nervous"
             />
 
         <ImageView
+            android:id="@+id/hurt_button"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:src="@drawable/button_hurt"
             />
 
         <ImageView
+            android:id="@+id/confused_button"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:src="@drawable/button_confused"
