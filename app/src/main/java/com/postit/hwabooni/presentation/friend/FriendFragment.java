@@ -91,6 +91,7 @@ public class FriendFragment extends Fragment {
 
                 }else{
                     User user = documentSnapshot.toObject(User.class);
+                    //Log.d("user이름", user.getName());
                     adapter.setMyName(user==null?"null":user.getName());
 
                     if(user.getFollower()!=null){

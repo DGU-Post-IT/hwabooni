@@ -135,7 +135,8 @@
             android:layout_height="wrap_content"
             android:background="@null"
             android:text="부모님 연동하기"
-            android:textSize="24sp"/>
+            android:textSize="24sp"
+            android:visibility="gone"/>
     </LinearLayout>
 
 
