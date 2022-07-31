@@ -1,6 +1,8 @@
 package com.postit.hwabooni.model;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentId;
+import com.google.firebase.firestore.ServerTimestamp;
 
 public class News {
     @DocumentId
@@ -9,7 +11,9 @@ public class News {
     String picture;
     int type;
     String data;
-    long time;
+    String email;
+    @ServerTimestamp
+    Timestamp timestamp;
 
     public String getId() {
         return id;
@@ -51,11 +55,11 @@ public class News {
         this.data = data;
     }
 
-    public long getTime() {
-        return time;
-    }
+    public String getEmail() {return email;}
 
-    public void setTime(long time) {
-        this.time = time;
-    }
+    public void setEmail(String email) {this.email = email;}
+
+    public Timestamp getTimestamp() {return timestamp;}
+
+    public void setTimestamp(Timestamp timestamp) {this.timestamp = timestamp;}
 }
