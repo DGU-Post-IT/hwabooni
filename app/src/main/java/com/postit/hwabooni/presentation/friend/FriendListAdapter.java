@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,6 +92,7 @@ public class FriendListAdapter extends RecyclerView.Adapter {
         if (holder instanceof HeaderViewHolder) {
             HeaderViewHolder headerViewHolder = (HeaderViewHolder) holder;
             final FriendRecyclerviewHeaderBinding binding = headerViewHolder.binding;
+            Log.d("user이름", myName);
             binding.myName.setText(myName);
             binding.helperName.setText("사회복지사분 성함");
             if (listener != null) binding.emotionRecordButton.setOnClickListener(listener);

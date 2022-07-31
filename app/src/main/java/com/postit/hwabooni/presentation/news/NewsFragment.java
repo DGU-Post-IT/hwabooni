@@ -65,8 +65,8 @@ public class NewsFragment extends Fragment {
         binding.refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Intent intent = new Intent(requireContext(), SignUpActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(requireContext(), SignUpActivity.class);
+//                startActivity(intent);
                 binding.refreshLayout.setRefreshing(false);
             }
         });
