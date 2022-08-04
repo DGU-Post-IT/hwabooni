@@ -59,7 +59,10 @@ public class FriendAddFragment extends DialogFragment {
                         public void onSuccess(Void aVoid) {
                             Log.d(TAG, "친구추가완료");
                             Toast.makeText(getContext(), "친구추가완료", Toast.LENGTH_LONG).show();
-                            getTargetFragment().onDestroy();
+                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                            fragmentManager.beginTransaction().remove(FriendAddFragment.this).commit();
+                            fragmentManager.popBackStack();
+
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {

@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -33,6 +34,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.postit.hwabooni.databinding.FragmentPlantAddBinding;
 import com.postit.hwabooni.model.PlantData;
+import com.postit.hwabooni.presentation.friend.FriendAddFragment;
 
 import java.io.File;
 
@@ -137,6 +139,12 @@ public class PlantAddFragment extends DialogFragment {
                             
                             PlantData newPlantData = new PlantData(newPlantName, urlString);
                             ref.set(newPlantData);
+                            Log.d(TAG, "onComplete: 식물추가 성공");
+                            Toast.makeText(getActivity(), "식물추가 성공", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), "친구추가완료", Toast.LENGTH_LONG).show();
+                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                            fragmentManager.beginTransaction().remove(PlantAddFragment.this).commit();
+                            fragmentManager.popBackStack();
 
                         } else {
                             Log.d(TAG, "onComplete: url가져오기 실패");

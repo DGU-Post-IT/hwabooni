@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -38,6 +40,8 @@ public class PlantFragment extends Fragment {
     private PlantAdapter plantAdapter;
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
+
+    String currentPlantName;
 
     @Nullable
     @Override
@@ -64,12 +68,30 @@ public class PlantFragment extends Fragment {
             loadPlantInfo(plant);
         };
         recyclerView.setAdapter(plantAdapter);
+        currentPlantName = "";
 
-        binding.btnAdd.setOnClickListener(new View.OnClickListener() {
+        binding.btnPlantAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 new PlantAddFragment().show(requireActivity().getSupportFragmentManager(), "PLANT_ADD");
             }
+        });
+
+        binding.btnPlantDelete.setOnClickListener(view1 -> {
+            db.collection("User").document(auth.getCurrentUser().getEmail()).collection("plant").document(currentPlantName).delete()
+                 .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "해당 식물 삭제");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "해당 식물 삭제 실패", e);
+                    }
+                });
+            Toast.makeText(getContext(), "해당 식물 삭제", Toast.LENGTH_LONG).show();
         });
 
         db.collection("User").document(auth.getCurrentUser().getEmail()).collection("plant").get().addOnCompleteListener((task)->{
@@ -98,7 +120,9 @@ public class PlantFragment extends Fragment {
                        if(task.getResult()!=null){
                            try{
                                PlantRecord record = task.getResult().toObjects(PlantRecord.class).get(0);
-                               showPlantInfo(plant,record);    
+                               showPlantInfo(plant,record);
+                               Log.d(TAG, "현재 식물 이름: "+plant.getName());
+                               currentPlantName = plant.getName();
                            }                           
                            catch(Exception e){
                                Log.d(TAG, "loadPlantInfo: 식물상태 로드 불가");
