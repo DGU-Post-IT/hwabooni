@@ -96,8 +96,14 @@ public class PlantFragment extends Fragment {
                    if(task.isSuccessful()){
                        //Log.d(TAG, "loadPlantInfo: 성공");
                        if(task.getResult()!=null){
-                           PlantRecord record = task.getResult().toObjects(PlantRecord.class).get(0);
-                           showPlantInfo(plant,record);
+                           try{
+                               PlantRecord record = task.getResult().toObjects(PlantRecord.class).get(0);
+                               showPlantInfo(plant,record);    
+                           }                           
+                           catch(Exception e){
+                               Log.d(TAG, "loadPlantInfo: 식물상태 로드 불가");
+                               Toast.makeText(getContext(), "식물상태 로드 불가", Toast.LENGTH_SHORT).show();
+                           }
                        }
                    }
                 });
@@ -107,11 +113,12 @@ public class PlantFragment extends Fragment {
         String imageUrl = plant.getPicture();
         Glide.with(getContext()).load(imageUrl).into(binding.ivPlant);
 
-        if (plant.getPrettyWord() != null) {
-            binding.ivPrettyWord.setImageResource(R.drawable.button_misson_completion);
-        } else {
-            binding.ivPrettyWord.setImageResource(R.drawable.button_mission_incompletion);
-        }
+        // ** PrettyWord가 컬렉션형태라면 수정 필요
+//        if (plant.getPrettyWord() != null) {
+//            binding.ivPrettyWord.setImageResource(R.drawable.button_misson_completion);
+//        } else {
+//            binding.ivPrettyWord.setImageResource(R.drawable.button_mission_incompletion);
+//        }
 
         try {
             setHumid(record.getHumid());
