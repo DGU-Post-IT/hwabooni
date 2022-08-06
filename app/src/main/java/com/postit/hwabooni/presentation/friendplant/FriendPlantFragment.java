@@ -14,13 +14,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.postit.hwabooni.R;
 import com.postit.hwabooni.databinding.FragmentFriendPlantBinding;
 import com.postit.hwabooni.model.PlantData;
 import com.postit.hwabooni.model.PlantRecord;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 public class FriendPlantFragment extends Fragment {
@@ -83,32 +86,53 @@ public class FriendPlantFragment extends Fragment {
         });
 
     }
-
     void loadPlantInfo(PlantData plant){
+        Log.d(TAG, "loadPlantInfo: ");
         db.collection("User").document(email)
                 .collection("plant").document(plant.getId())
                 .collection("record")
-                .orderBy("timestamp")
+                .orderBy("timestamp", Query.Direction.DESCENDING)
                 .limit(1).get().addOnCompleteListener((task)->{
                     if(task.isSuccessful()){
                         if(task.getResult()!=null&&!task.getResult().isEmpty()){
                             PlantRecord record = task.getResult().toObjects(PlantRecord.class).get(0);
-                            showPlantInfo(plant,record);
+                            loadPlantPrettyWordRecord(plant,record);
                         }
                     }
                 });
     }
 
-    void showPlantInfo(PlantData plant,PlantRecord record){
+    void loadPlantPrettyWordRecord(PlantData plant,PlantRecord record){
+        Log.d(TAG, "loadPlantPrettyWordRecord: ");
+        db.collection("User").document(email)
+                .collection("plant").document(plant.getId())
+                .collection("prettyWord")
+                .orderBy("timestamp", Query.Direction.DESCENDING)
+                .limit(1).get().addOnCompleteListener((task)->{
+                    if(task.isSuccessful()){
+                        if(task.getResult().isEmpty()) Log.d(TAG, "loadPlantPrettyWordRecord: empty result");
+                        if(task.getResult()!=null&&!task.getResult().isEmpty()){
+                            String data = task.getResult().getDocuments().get(0).getId().substring(0,10);
+                            Log.d(TAG, "loadPlantPrettyWordRecord: "+data);
+                            showPlantInfo(plant,record,data);
+                        }else{
+                            showPlantInfo(plant,record,null);
+                        }
+                    }
+                });
+    }
+
+    void showPlantInfo(PlantData plant,PlantRecord record,String prettyWord){
+        Log.d(TAG, "showPlantInfo: ");
         String imageUrl = plant.getPicture();
         Glide.with(getContext()).load(imageUrl).into(binding.ivPlant);
 
-        // ** PrettyWord가 컬렉션형태라면 수정 필요
-//        if (plant.getPrettyWord() != null) {
-//            binding.ivPrettyWord.setImageResource(R.drawable.button_misson_completion);
-//        } else {
-//            binding.ivPrettyWord.setImageResource(R.drawable.button_mission_incompletion);
-//        }
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        if (format.format(new Date()).equals(prettyWord)) {
+            binding.ivPrettyWord.setImageResource(R.drawable.button_misson_completion);
+        } else {
+            binding.ivPrettyWord.setImageResource(R.drawable.button_mission_incompletion);
+        }
 
         try {
             setHumid(record.getHumid());
@@ -127,7 +151,13 @@ public class FriendPlantFragment extends Fragment {
         } else {
             binding.humidNo.setVisibility(View.GONE);
             binding.humidIndicator.setVisibility(View.VISIBLE);
-            binding.humidIndicator.setValue((value - 700) / 3300);
+            if(value <= 700) {
+                binding.humidIndicator.setValue(0.999);
+            } else if(value >= 4000) {
+                binding.humidIndicator.setValue(0.001);
+            } else {
+                binding.humidIndicator.setValue(1 - (value - 700) / 3300);
+            }
         }
     }
 
@@ -139,7 +169,13 @@ public class FriendPlantFragment extends Fragment {
         }else{
             binding.tempNo.setVisibility(View.GONE);
             binding.tempIndicator.setVisibility(View.VISIBLE);
-            binding.tempIndicator.setValue((value-15)/10);
+            if(value <= 15) {
+                binding.tempIndicator.setValue(0.999);
+            } else if(value >= 25) {
+                binding.tempIndicator.setValue(0.001);
+            } else {
+                binding.tempIndicator.setValue((value - 15) / 10);
+            }
         }
     }
 
