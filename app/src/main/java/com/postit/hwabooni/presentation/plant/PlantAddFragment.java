@@ -19,12 +19,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -32,6 +34,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.postit.hwabooni.databinding.FragmentPlantAddBinding;
 import com.postit.hwabooni.model.PlantData;
+import com.postit.hwabooni.presentation.friend.FriendAddFragment;
 
 import java.io.File;
 
@@ -42,9 +45,13 @@ public class PlantAddFragment extends DialogFragment {
     FragmentPlantAddBinding binding;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseStorage storage = FirebaseStorage.getInstance();
+    FirebaseAuth auth = FirebaseAuth.getInstance();
+
     private final int REQUEST_CODE = 200;
     File destFile;
     Uri uri;
+
+    String email;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,6 +70,7 @@ public class PlantAddFragment extends DialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         StorageReference storageRef = storage.getReference();
+        email = auth.getCurrentUser().getEmail();
 
         binding.btnAddPicture.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,10 +135,16 @@ public class PlantAddFragment extends DialogFragment {
                             //문서 생성 및 업로드
                             String newPlantName = binding.tvPlantName.getText().toString(); //식물이름
                             Log.d("url가져오기 성공 url : ", urlString.toString());
-                            DocumentReference ref = db.collection("dummyPlant").document();
+                            DocumentReference ref = db.collection("User").document(email).collection("plant").document(newPlantName);
                             
                             PlantData newPlantData = new PlantData(newPlantName, urlString);
                             ref.set(newPlantData);
+                            Log.d(TAG, "onComplete: 식물추가 성공");
+                            Toast.makeText(getActivity(), "식물추가 성공", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), "친구추가완료", Toast.LENGTH_LONG).show();
+                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                            fragmentManager.beginTransaction().remove(PlantAddFragment.this).commit();
+                            fragmentManager.popBackStack();
 
                         } else {
                             Log.d(TAG, "onComplete: url가져오기 실패");

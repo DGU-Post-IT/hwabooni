@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -39,6 +41,8 @@ public class PlantFragment extends Fragment {
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
 
+    String currentPlantName;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -64,8 +68,28 @@ public class PlantFragment extends Fragment {
             loadPlantInfo(plant);
         };
         recyclerView.setAdapter(plantAdapter);
+        currentPlantName = "";
+
 
         binding.btnAdd.setOnClickListener(view1 -> new PlantAddFragment().show(requireActivity().getSupportFragmentManager(), "PLANT_ADD"));
+
+
+        binding.btnPlantDelete.setOnClickListener(view1 -> {
+            db.collection("User").document(auth.getCurrentUser().getEmail()).collection("plant").document(currentPlantName).delete()
+                 .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "해당 식물 삭제");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "해당 식물 삭제 실패", e);
+                    }
+                });
+            Toast.makeText(getContext(), "해당 식물 삭제", Toast.LENGTH_LONG).show();
+        });
 
         db.collection("User").document(auth.getCurrentUser().getEmail()).collection("plant").get().addOnCompleteListener((task)->{
             if(task.isSuccessful()){
@@ -91,8 +115,16 @@ public class PlantFragment extends Fragment {
                    if(task.isSuccessful()){
                        //Log.d(TAG, "loadPlantInfo: 성공");
                        if(task.getResult()!=null){
-                           PlantRecord record = task.getResult().toObjects(PlantRecord.class).get(0);
-                           showPlantInfo(plant,record);
+                           try{
+                               PlantRecord record = task.getResult().toObjects(PlantRecord.class).get(0);
+                               showPlantInfo(plant,record);
+                               Log.d(TAG, "현재 식물 이름: "+plant.getName());
+                               currentPlantName = plant.getName();
+                           }                           
+                           catch(Exception e){
+                               Log.d(TAG, "loadPlantInfo: 식물상태 로드 불가");
+                               Toast.makeText(getContext(), "식물상태 로드 불가", Toast.LENGTH_SHORT).show();
+                           }
                        }
                    }
                 });
@@ -102,11 +134,12 @@ public class PlantFragment extends Fragment {
         String imageUrl = plant.getPicture();
         Glide.with(getContext()).load(imageUrl).into(binding.ivPlant);
 
-        if (plant.getPrettyWord() != null) {
-            binding.ivPrettyWord.setImageResource(R.drawable.button_misson_completion);
-        } else {
-            binding.ivPrettyWord.setImageResource(R.drawable.button_mission_incompletion);
-        }
+        // ** PrettyWord가 컬렉션형태라면 수정 필요
+//        if (plant.getPrettyWord() != null) {
+//            binding.ivPrettyWord.setImageResource(R.drawable.button_misson_completion);
+//        } else {
+//            binding.ivPrettyWord.setImageResource(R.drawable.button_mission_incompletion);
+//        }
 
         try {
             setHumid(record.getHumid());

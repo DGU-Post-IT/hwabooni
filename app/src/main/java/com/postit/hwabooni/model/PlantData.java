@@ -8,7 +8,7 @@ public class PlantData {
     String id;
     String name;
     String picture;
-    String prettyWord;
+//    String prettyWord;
 
     public PlantData() {
 
@@ -20,13 +20,13 @@ public class PlantData {
     }
 
 
-    public String getPrettyWord() {
-        return prettyWord;
-    }
-
-    public void setPrettyWord(String prettyWord) {
-        this.prettyWord = prettyWord;
-    }
+//    public String getPrettyWord() {
+//        return prettyWord;
+//    }
+//
+//    public void setPrettyWord(String prettyWord) {
+//        this.prettyWord = prettyWord;
+//    }
 
 
     public String getPicture() {
