@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.postit.hwabooni.R;
 import com.postit.hwabooni.databinding.FragmentPlantBinding;
@@ -65,12 +65,7 @@ public class PlantFragment extends Fragment {
         };
         recyclerView.setAdapter(plantAdapter);
 
-        binding.btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new PlantAddFragment().show(requireActivity().getSupportFragmentManager(), "PLANT_ADD");
-            }
-        });
+        binding.btnAdd.setOnClickListener(view1 -> new PlantAddFragment().show(requireActivity().getSupportFragmentManager(), "PLANT_ADD"));
 
         db.collection("User").document(auth.getCurrentUser().getEmail()).collection("plant").get().addOnCompleteListener((task)->{
             if(task.isSuccessful()){
@@ -91,7 +86,7 @@ public class PlantFragment extends Fragment {
         db.collection("User").document(auth.getCurrentUser().getEmail())
                 .collection("plant").document(plant.getId())
                 .collection("record")
-                .orderBy("timestamp")
+                .orderBy("timestamp", Query.Direction.DESCENDING)
                 .limit(1).get().addOnCompleteListener((task)->{
                    if(task.isSuccessful()){
                        //Log.d(TAG, "loadPlantInfo: 성공");
