@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -71,23 +72,13 @@ public class PlantFragment extends Fragment {
         currentPlantName = "";
 
 
-        binding.btnAdd.setOnClickListener(view1 -> new PlantAddFragment().show(requireActivity().getSupportFragmentManager(), "PLANT_ADD"));
+        binding.btnPlantAdd.setOnClickListener(view1 -> new PlantAddFragment().show(requireActivity().getSupportFragmentManager(), "PLANT_ADD"));
 
 
         binding.btnPlantDelete.setOnClickListener(view1 -> {
             db.collection("User").document(auth.getCurrentUser().getEmail()).collection("plant").document(currentPlantName).delete()
-                 .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "해당 식물 삭제");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "해당 식물 삭제 실패", e);
-                    }
-                });
+                 .addOnSuccessListener(aVoid -> Log.d(TAG, "해당 식물 삭제"))
+                .addOnFailureListener(e -> Log.w(TAG, "해당 식물 삭제 실패", e));
             Toast.makeText(getContext(), "해당 식물 삭제", Toast.LENGTH_LONG).show();
         });
 
@@ -158,10 +149,14 @@ public class PlantFragment extends Fragment {
         } else {
             binding.humidNo.setVisibility(View.GONE);
             binding.humidIndicator.setVisibility(View.VISIBLE);
-            Log.d(TAG, "setHumid: "+value);
-            if(value <= 700) binding.humidIndicator.setValue(0.999);
-            if(value >= 4000) binding.humidIndicator.setValue(0.001);
-            else binding.humidIndicator.setValue(1-(value - 700)/3300);
+            if(value <= 700) {
+                binding.humidIndicator.setValue(0.999);
+            } else if(value >= 4000) {
+                binding.humidIndicator.setValue(0.001);
+            } else {
+                binding.humidIndicator.setValue(1 - (value - 700) / 3300);
+                Log.d(TAG, "setHumid: 3");
+            }
         }
     }
 
@@ -173,10 +168,13 @@ public class PlantFragment extends Fragment {
         }else{
             binding.tempNo.setVisibility(View.GONE);
             binding.tempIndicator.setVisibility(View.VISIBLE);
-            Log.d(TAG, "setTemp: "+value);
-            if(value <= 15) binding.humidIndicator.setValue(0.999);
-            if(value >= 25) binding.humidIndicator.setValue(0.001);
-            else binding.tempIndicator.setValue((value-15)/10);
+            if(value <= 15) {
+                binding.tempIndicator.setValue(0.999);
+            } else if(value >= 25) {
+                binding.tempIndicator.setValue(0.001);
+            } else {
+                binding.tempIndicator.setValue((value - 15) / 10);
+            }
         }
     }
 }
