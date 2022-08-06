@@ -103,11 +103,12 @@ public class FriendPlantFragment extends Fragment {
         String imageUrl = plant.getPicture();
         Glide.with(getContext()).load(imageUrl).into(binding.ivPlant);
 
-        if (plant.getPrettyWord() != null) {
-            binding.ivPrettyWord.setImageResource(R.drawable.button_misson_completion);
-        } else {
-            binding.ivPrettyWord.setImageResource(R.drawable.button_mission_incompletion);
-        }
+        // ** PrettyWord가 컬렉션형태라면 수정 필요
+//        if (plant.getPrettyWord() != null) {
+//            binding.ivPrettyWord.setImageResource(R.drawable.button_misson_completion);
+//        } else {
+//            binding.ivPrettyWord.setImageResource(R.drawable.button_mission_incompletion);
+//        }
 
         try {
             setHumid(record.getHumid());

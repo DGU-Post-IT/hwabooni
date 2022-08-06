@@ -8,23 +8,39 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.api.LogDescriptor;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.postit.hwabooni.databinding.CardviewFriendBinding;
 import com.postit.hwabooni.databinding.FriendRecyclerviewHeaderBinding;
 import com.postit.hwabooni.model.Emotion;
 import com.postit.hwabooni.model.FriendData;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FriendListAdapter extends RecyclerView.Adapter {
+
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseAuth auth = FirebaseAuth.getInstance();
 
     interface FriendClickListener {
         void onClick(String name,String email);
@@ -93,6 +109,7 @@ public class FriendListAdapter extends RecyclerView.Adapter {
         } else {
             CardviewFriendBinding itemBinding = CardviewFriendBinding.inflate(LayoutInflater.from(context), parent, false);
             holder = new FriendViewHolder(itemBinding);
+
         }
 
         return holder;
@@ -146,6 +163,25 @@ public class FriendListAdapter extends RecyclerView.Adapter {
             binding.friendCallButton.setOnClickListener((v) -> {
                 Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(phoneNumber));
                 binding.getRoot().getContext().startActivity(intent);
+            });
+
+            binding.friendDeleteButton.setOnClickListener(view -> {
+                DocumentReference documentRef = db.collection("User").document(auth.getCurrentUser().getEmail());
+                documentRef.update("follower", FieldValue.arrayRemove(friendEmail))
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d("TAG", "친구삭제완료");
+                                Toast.makeText(view.getContext(), "친구삭제완료", Toast.LENGTH_LONG).show();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(view.getContext(), "친구삭제실패", Toast.LENGTH_LONG).show();
+                                Log.w("TAG", "친구삭제실패", e);
+                            }
+                        });;
             });
 
         }

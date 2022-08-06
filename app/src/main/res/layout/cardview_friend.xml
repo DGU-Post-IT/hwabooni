@@ -10,9 +10,9 @@
     app:cardElevation="8dp">
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
         android:padding="10dp">
 
         <ImageView
@@ -20,11 +20,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginStart="30dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/friend_name"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-
+            android:layout_gravity="center"
             />
 
         <TextView
@@ -35,36 +31,41 @@
             android:textSize="30dp"
             android:textColor="?android:attr/textColorPrimary"
             android:layout_marginStart="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/friend_emotion_view"
-            app:layout_constraintStart_toEndOf="@id/plant_image_view"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_gravity="center"
+            />
 
         <ImageView
             android:id="@+id/friend_emotion_view"
             android:layout_marginStart="40dp"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/friend_name"
-            app:layout_constraintTop_toTopOf="parent"
-
+            android:layout_gravity="center"
             />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/friend_delete_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="30dp"
+            android:background="?android:selectableItemBackgroundBorderless"
+            android:contentDescription="삭제"
+            android:layout_gravity="center"
+
+            android:scaleType="fitCenter"
+            android:src="@drawable/friend_delete_button_temp" />
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/friend_call_button"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_margin="6dp"
+            android:layout_marginStart="30dp"
             android:background="?android:selectableItemBackgroundBorderless"
             android:contentDescription="@string/call"
+            android:layout_gravity="center"
             android:padding="6dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_telephone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:src="@drawable/ic_telephone" />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </androidx.cardview.widget.CardView>
