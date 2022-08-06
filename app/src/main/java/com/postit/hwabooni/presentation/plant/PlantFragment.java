@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +17,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.postit.hwabooni.R;
 import com.postit.hwabooni.databinding.FragmentPlantBinding;
@@ -70,12 +70,9 @@ public class PlantFragment extends Fragment {
         recyclerView.setAdapter(plantAdapter);
         currentPlantName = "";
 
-        binding.btnPlantAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new PlantAddFragment().show(requireActivity().getSupportFragmentManager(), "PLANT_ADD");
-            }
-        });
+
+        binding.btnAdd.setOnClickListener(view1 -> new PlantAddFragment().show(requireActivity().getSupportFragmentManager(), "PLANT_ADD"));
+
 
         binding.btnPlantDelete.setOnClickListener(view1 -> {
             db.collection("User").document(auth.getCurrentUser().getEmail()).collection("plant").document(currentPlantName).delete()
@@ -113,7 +110,7 @@ public class PlantFragment extends Fragment {
         db.collection("User").document(auth.getCurrentUser().getEmail())
                 .collection("plant").document(plant.getId())
                 .collection("record")
-                .orderBy("timestamp")
+                .orderBy("timestamp", Query.Direction.DESCENDING)
                 .limit(1).get().addOnCompleteListener((task)->{
                    if(task.isSuccessful()){
                        //Log.d(TAG, "loadPlantInfo: 성공");
