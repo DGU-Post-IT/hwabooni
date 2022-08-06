@@ -14,8 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -25,7 +23,9 @@ import com.postit.hwabooni.databinding.FragmentPlantBinding;
 import com.postit.hwabooni.model.PlantData;
 import com.postit.hwabooni.model.PlantRecord;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 public class PlantFragment extends Fragment {
@@ -98,39 +98,52 @@ public class PlantFragment extends Fragment {
     }
 
     void loadPlantInfo(PlantData plant){
+        Log.d(TAG, "loadPlantInfo: ");
         db.collection("User").document(auth.getCurrentUser().getEmail())
                 .collection("plant").document(plant.getId())
                 .collection("record")
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .limit(1).get().addOnCompleteListener((task)->{
-                   if(task.isSuccessful()){
-                       //Log.d(TAG, "loadPlantInfo: 성공");
-                       if(task.getResult()!=null){
-                           try{
-                               PlantRecord record = task.getResult().toObjects(PlantRecord.class).get(0);
-                               showPlantInfo(plant,record);
-                               Log.d(TAG, "현재 식물 이름: "+plant.getName());
-                               currentPlantName = plant.getName();
-                           }                           
-                           catch(Exception e){
-                               Log.d(TAG, "loadPlantInfo: 식물상태 로드 불가");
-                               Toast.makeText(getContext(), "식물상태 로드 불가", Toast.LENGTH_SHORT).show();
-                           }
-                       }
-                   }
+                    if(task.isSuccessful()){
+                        if(task.getResult()!=null&&!task.getResult().isEmpty()){
+                            PlantRecord record = task.getResult().toObjects(PlantRecord.class).get(0);
+                            loadPlantPrettyWordRecord(plant,record);
+                        }
+                    }
                 });
     }
 
-    void showPlantInfo(PlantData plant,PlantRecord record){
+    void loadPlantPrettyWordRecord(PlantData plant,PlantRecord record){
+        Log.d(TAG, "loadPlantPrettyWordRecord: ");
+        db.collection("User").document(auth.getCurrentUser().getEmail())
+                .collection("plant").document(plant.getId())
+                .collection("prettyWord")
+                .orderBy("timestamp", Query.Direction.DESCENDING)
+                .limit(1).get().addOnCompleteListener((task)->{
+                    if(task.isSuccessful()){
+                        if(task.getResult().isEmpty()) Log.d(TAG, "loadPlantPrettyWordRecord: empty result");
+                        if(task.getResult()!=null&&!task.getResult().isEmpty()){
+                            String data = task.getResult().getDocuments().get(0).getId().substring(0,10);
+                            Log.d(TAG, "loadPlantPrettyWordRecord: "+data);
+                            showPlantInfo(plant,record,data);
+                        }else{
+                            showPlantInfo(plant,record,null);
+                        }
+                    }
+                });
+    }
+
+    void showPlantInfo(PlantData plant,PlantRecord record,String prettyWord){
+        Log.d(TAG, "showPlantInfo: ");
         String imageUrl = plant.getPicture();
         Glide.with(getContext()).load(imageUrl).into(binding.ivPlant);
 
-        // ** PrettyWord가 컬렉션형태라면 수정 필요
-//        if (plant.getPrettyWord() != null) {
-//            binding.ivPrettyWord.setImageResource(R.drawable.button_misson_completion);
-//        } else {
-//            binding.ivPrettyWord.setImageResource(R.drawable.button_mission_incompletion);
-//        }
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        if (format.format(new Date()).equals(prettyWord)) {
+            binding.ivPrettyWord.setImageResource(R.drawable.button_misson_completion);
+        } else {
+            binding.ivPrettyWord.setImageResource(R.drawable.button_mission_incompletion);
+        }
 
         try {
             setHumid(record.getHumid());
@@ -155,7 +168,6 @@ public class PlantFragment extends Fragment {
                 binding.humidIndicator.setValue(0.001);
             } else {
                 binding.humidIndicator.setValue(1 - (value - 700) / 3300);
-                Log.d(TAG, "setHumid: 3");
             }
         }
     }
