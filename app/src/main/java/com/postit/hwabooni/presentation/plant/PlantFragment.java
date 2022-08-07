@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -71,14 +73,17 @@ public class PlantFragment extends Fragment {
         recyclerView.setAdapter(plantAdapter);
         currentPlantName = "";
 
-
-        binding.btnPlantAdd.setOnClickListener(view1 -> new PlantAddFragment().show(requireActivity().getSupportFragmentManager(), "PLANT_ADD"));
-
+        binding.btnPlantAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new PlantAddFragment().show(requireActivity().getSupportFragmentManager(), "PLANT_ADD");
+            }
+        });
 
         binding.btnPlantDelete.setOnClickListener(view1 -> {
             db.collection("User").document(auth.getCurrentUser().getEmail()).collection("plant").document(currentPlantName).delete()
-                 .addOnSuccessListener(aVoid -> Log.d(TAG, "해당 식물 삭제"))
-                .addOnFailureListener(e -> Log.w(TAG, "해당 식물 삭제 실패", e));
+                    .addOnSuccessListener(aVoid -> Log.d(TAG, "해당 식물 삭제"))
+                    .addOnFailureListener(e -> Log.w(TAG, "해당 식물 삭제 실패", e));
             Toast.makeText(getContext(), "해당 식물 삭제", Toast.LENGTH_LONG).show();
         });
 
@@ -98,18 +103,26 @@ public class PlantFragment extends Fragment {
     }
 
     void loadPlantInfo(PlantData plant){
-        Log.d(TAG, "loadPlantInfo: ");
         db.collection("User").document(auth.getCurrentUser().getEmail())
                 .collection("plant").document(plant.getId())
                 .collection("record")
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .limit(1).get().addOnCompleteListener((task)->{
-                    if(task.isSuccessful()){
-                        if(task.getResult()!=null&&!task.getResult().isEmpty()){
-                            PlantRecord record = task.getResult().toObjects(PlantRecord.class).get(0);
-                            loadPlantPrettyWordRecord(plant,record);
-                        }
-                    }
+                   if(task.isSuccessful()){
+                       //Log.d(TAG, "loadPlantInfo: 성공");
+                       if(task.getResult()!=null&&!task.getResult().isEmpty()){
+                           try{
+                               PlantRecord record = task.getResult().toObjects(PlantRecord.class).get(0);
+                               loadPlantPrettyWordRecord(plant,record);
+                               Log.d(TAG, "현재 식물 이름: "+plant.getName());
+                               currentPlantName = plant.getName();
+                           }                           
+                           catch(Exception e){
+                               Log.d(TAG, "loadPlantInfo: 식물상태 로드 불가");
+                               Toast.makeText(getContext(), "식물상태 로드 불가", Toast.LENGTH_SHORT).show();
+                           }
+                       }
+                   }
                 });
     }
 
@@ -168,6 +181,7 @@ public class PlantFragment extends Fragment {
                 binding.humidIndicator.setValue(0.001);
             } else {
                 binding.humidIndicator.setValue(1 - (value - 700) / 3300);
+                Log.d(TAG, "setHumid: 3");
             }
         }
     }
@@ -180,6 +194,7 @@ public class PlantFragment extends Fragment {
         }else{
             binding.tempNo.setVisibility(View.GONE);
             binding.tempIndicator.setVisibility(View.VISIBLE);
+            Log.d(TAG, "setTemp: "+value);
             if(value <= 15) {
                 binding.tempIndicator.setValue(0.999);
             } else if(value >= 25) {
