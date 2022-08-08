@@ -1,5 +1,6 @@
 package com.postit.hwabooni.presentation.friend;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,7 +32,12 @@ import com.postit.hwabooni.presentation.login.LoginActivity;
 
 import java.util.ArrayList;
 
-public class FriendFragment extends Fragment {
+public class FriendFragment extends Fragment implements DialogInterface.OnDismissListener {
+
+    @Override
+    public void onDismiss(DialogInterface dialogInterface) {
+        refreshFragment();
+    }
 
     private static final String TAG = "FriendFragment";
 
@@ -39,6 +45,8 @@ public class FriendFragment extends Fragment {
     FirebaseAuth auth = FirebaseAuth.getInstance();
     FragmentFriendBinding binding;
     FriendListAdapter adapter;
+
+    private int refresh = 0;
 
     MutableLiveData<ArrayList<FriendData>> friendsList = new MutableLiveData<>(new ArrayList<>());
 
@@ -79,7 +87,9 @@ public class FriendFragment extends Fragment {
                     //Log.d("user이름", user.getName());
                     initRecyclerView();
                     adapter.setMyName(user==null?"null":user.getName());
-
+                    if(user!=null){
+                        adapter.setMyEmotion(user.getEmotion());
+                    }
                     if(user.getFollower()!=null){
                         new FriendRepository().getFriendsData(user.getFollower(),(data)->{
                             Log.d(TAG, "onViewCreated: callback");
@@ -125,6 +135,7 @@ public class FriendFragment extends Fragment {
         adapter.setFriendAddListener(view -> {
             //launcher.launch(new Intent(getContext(), FriendAddFragment.class));
             new FriendAddFragment().show(requireActivity().getSupportFragmentManager(), "Friend_Add");
+            refresh=0;
         });
 
 
@@ -135,4 +146,5 @@ public class FriendFragment extends Fragment {
         ft.detach(this);
         ft.replace(R.id.fragment_container,new FriendFragment()).commit();
     }
+
 }

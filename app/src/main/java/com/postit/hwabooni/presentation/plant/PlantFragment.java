@@ -109,19 +109,24 @@ public class PlantFragment extends Fragment {
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .limit(1).get().addOnCompleteListener((task)->{
                    if(task.isSuccessful()){
-                       //Log.d(TAG, "loadPlantInfo: 성공");
-                       if(task.getResult()!=null&&!task.getResult().isEmpty()){
-                           try{
+                       Log.d(TAG, "loadPlantInfo: 성공");
+                       try{
+                           if(task.getResult()!=null&&!task.getResult().isEmpty()){
                                PlantRecord record = task.getResult().toObjects(PlantRecord.class).get(0);
                                loadPlantPrettyWordRecord(plant,record);
                                Log.d(TAG, "현재 식물 이름: "+plant.getName());
                                currentPlantName = plant.getName();
-                           }                           
-                           catch(Exception e){
+                           }
+                           else{
                                Log.d(TAG, "loadPlantInfo: 식물상태 로드 불가");
                                Toast.makeText(getContext(), "식물상태 로드 불가", Toast.LENGTH_SHORT).show();
                            }
                        }
+                       catch (Exception e){
+                           Log.d(TAG, "loadPlantInfo: 식물상태 로드 불가");
+                           Toast.makeText(getContext(), "식물상태 로드 불가", Toast.LENGTH_SHORT).show();
+                       }
+
                    }
                 });
     }
@@ -196,9 +201,9 @@ public class PlantFragment extends Fragment {
             binding.tempIndicator.setVisibility(View.VISIBLE);
             Log.d(TAG, "setTemp: "+value);
             if(value <= 15) {
-                binding.tempIndicator.setValue(0.999);
-            } else if(value >= 25) {
                 binding.tempIndicator.setValue(0.001);
+            } else if(value >= 25) {
+                binding.tempIndicator.setValue(0.999);
             } else {
                 binding.tempIndicator.setValue((value - 15) / 10);
             }

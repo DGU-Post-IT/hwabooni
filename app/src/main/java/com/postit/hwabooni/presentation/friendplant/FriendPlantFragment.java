@@ -5,14 +5,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -20,6 +27,7 @@ import com.postit.hwabooni.R;
 import com.postit.hwabooni.databinding.FragmentFriendPlantBinding;
 import com.postit.hwabooni.model.PlantData;
 import com.postit.hwabooni.model.PlantRecord;
+import com.postit.hwabooni.presentation.friend.FriendAddFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,6 +39,7 @@ public class FriendPlantFragment extends Fragment {
     private static final String TAG = "FriendPlantFragment";
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseAuth auth = FirebaseAuth.getInstance();
 
     @NonNull FragmentFriendPlantBinding binding;
     private ArrayList<PlantData> plantDataList;
@@ -41,6 +50,7 @@ public class FriendPlantFragment extends Fragment {
     private LinearLayoutManager linearLayoutManager;
     private String name;
     private String email;
+
 
     @Nullable
     @Override
@@ -84,6 +94,30 @@ public class FriendPlantFragment extends Fragment {
                 plantAdapter.notifyDataSetChanged();
             }
         });
+
+
+        binding.btnFriendDelete.setOnClickListener(view1 -> {
+            DocumentReference documentRef = db.collection("User").document(auth.getCurrentUser().getEmail());
+            documentRef.update("follower", FieldValue.arrayRemove(email))
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d("TAG", "친구삭제완료");
+                            Toast.makeText(view.getContext(), "친구삭제완료", Toast.LENGTH_LONG).show();
+                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                            fragmentManager.beginTransaction().remove(FriendPlantFragment.this).commit();
+                            fragmentManager.popBackStack();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(view.getContext(), "친구삭제실패", Toast.LENGTH_LONG).show();
+                            Log.w("TAG", "친구삭제실패", e);
+                        }
+                    });;
+        });
+
 
     }
     void loadPlantInfo(PlantData plant){
@@ -170,9 +204,9 @@ public class FriendPlantFragment extends Fragment {
             binding.tempNo.setVisibility(View.GONE);
             binding.tempIndicator.setVisibility(View.VISIBLE);
             if(value <= 15) {
-                binding.tempIndicator.setValue(0.999);
-            } else if(value >= 25) {
                 binding.tempIndicator.setValue(0.001);
+            } else if(value >= 25) {
+                binding.tempIndicator.setValue(0.999);
             } else {
                 binding.tempIndicator.setValue((value - 15) / 10);
             }

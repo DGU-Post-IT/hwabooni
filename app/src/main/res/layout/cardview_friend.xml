@@ -42,17 +42,7 @@
             android:layout_gravity="center"
             />
 
-        <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/friend_delete_button"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="30dp"
-            android:background="?android:selectableItemBackgroundBorderless"
-            android:contentDescription="삭제"
-            android:layout_gravity="center"
 
-            android:scaleType="fitCenter"
-            android:src="@drawable/friend_delete_button_temp" />
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/friend_call_button"

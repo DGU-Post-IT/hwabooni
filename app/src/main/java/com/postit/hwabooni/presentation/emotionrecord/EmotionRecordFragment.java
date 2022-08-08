@@ -1,5 +1,6 @@
 package com.postit.hwabooni.presentation.emotionrecord;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -12,6 +13,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -102,6 +105,17 @@ public class EmotionRecordFragment extends DialogFragment {
                 dismiss();
             }
         });
+    }
+
+    @Override
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        super.onDismiss(dialog);
+        FragmentManager fm = getActivity().getSupportFragmentManager();
+
+        Fragment f = fm.findFragmentByTag("FRIEND_FRAGMENT");
+        if(f instanceof DialogInterface.OnDismissListener){
+            ((DialogInterface.OnDismissListener) f).onDismiss(dialog);
+        }
     }
 
     void showToast(String msg) {

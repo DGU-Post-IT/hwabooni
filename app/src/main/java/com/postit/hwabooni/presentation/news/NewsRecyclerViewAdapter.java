@@ -85,7 +85,7 @@ public class NewsRecyclerViewAdapter extends ListAdapter<News, NewsRecyclerViewA
                 binding.newsImageView.setVisibility(View.GONE);
             }
             binding.callButton.setOnClickListener((v)->{
-                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:01033904771"));
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:01044654"));
                 binding.getRoot().getContext().startActivity(intent);
             });
         }
