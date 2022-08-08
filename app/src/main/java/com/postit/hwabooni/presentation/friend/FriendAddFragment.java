@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -19,6 +20,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.postit.hwabooni.databinding.FragmentFriendAddBinding;
+import com.postit.hwabooni.presentation.plant.PlantAddFragment;
 
 public class FriendAddFragment extends DialogFragment {
 
@@ -65,6 +67,9 @@ public class FriendAddFragment extends DialogFragment {
                 .addOnSuccessListener(aVoid -> {
                     Log.d(TAG, "친구추가완료");
                     showToast("친구추가완료");
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    fragmentManager.beginTransaction().remove(FriendAddFragment.this).commit();
+                    fragmentManager.popBackStack();
                 })
                 .addOnFailureListener(e -> {
                     showToast("친구추가실패");

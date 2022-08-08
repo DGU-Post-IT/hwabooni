@@ -68,7 +68,13 @@ public class FriendListAdapter extends RecyclerView.Adapter {
         this.myName = myName;
     }
 
+    public void setMyEmotion(String emotion){
+        this.myEmotion = emotion;
+    }
+
     private String myName = "이름없음";
+
+    private String myEmotion = "1";
 
     public void setListener(View.OnClickListener listener) {
         this.listener = listener;
@@ -124,6 +130,8 @@ public class FriendListAdapter extends RecyclerView.Adapter {
             final FriendRecyclerviewHeaderBinding binding = headerViewHolder.binding;
             Log.d("user이름", myName);
             binding.myName.setText(myName);
+            Drawable drawable = AppCompatResources.getDrawable(binding.getRoot().getContext(),Emotion.values()[Integer.parseInt(myEmotion)].getIcon());
+            binding.myEmotionImage.setImageDrawable(drawable);
             binding.helperName.setText("사회복지사분 성함");
             if (listener != null) binding.emotionRecordButton.setOnClickListener(listener);
             if (mypageListener!=null) binding.infoButton.setOnClickListener(mypageListener);
@@ -165,24 +173,7 @@ public class FriendListAdapter extends RecyclerView.Adapter {
                 binding.getRoot().getContext().startActivity(intent);
             });
 
-            binding.friendDeleteButton.setOnClickListener(view -> {
-                DocumentReference documentRef = db.collection("User").document(auth.getCurrentUser().getEmail());
-                documentRef.update("follower", FieldValue.arrayRemove(friendEmail))
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Log.d("TAG", "친구삭제완료");
-                                Toast.makeText(view.getContext(), "친구삭제완료", Toast.LENGTH_LONG).show();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(view.getContext(), "친구삭제실패", Toast.LENGTH_LONG).show();
-                                Log.w("TAG", "친구삭제실패", e);
-                            }
-                        });;
-            });
+
 
         }
 

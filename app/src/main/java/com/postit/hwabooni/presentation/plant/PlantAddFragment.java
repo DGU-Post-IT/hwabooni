@@ -146,6 +146,8 @@ public class PlantAddFragment extends DialogFragment {
                             fragmentManager.beginTransaction().remove(PlantAddFragment.this).commit();
                             fragmentManager.popBackStack();
 
+
+
                         } else {
                             Log.d(TAG, "onComplete: url가져오기 실패");
                             // Handle failures
