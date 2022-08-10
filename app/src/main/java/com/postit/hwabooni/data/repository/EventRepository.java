@@ -8,6 +8,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.postit.hwabooni.model.FriendData;
 import com.postit.hwabooni.model.News;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -24,6 +25,7 @@ public class EventRepository {
         ArrayList<News> newsArrayList = new ArrayList<>();
         Calendar today = Calendar.getInstance();
         today.set(Calendar.HOUR_OF_DAY, 0);
+        today.add(Calendar.DATE,-2);
         for (FriendData friend : friends) {
             db.collection("User").document(friend.getEmail())
                     .collection("event").whereGreaterThanOrEqualTo("timestamp", today.getTime())
