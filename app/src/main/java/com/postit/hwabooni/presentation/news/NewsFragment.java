@@ -87,6 +87,9 @@ public class NewsFragment extends Fragment {
                                         news.setPicture(plantData.getPicture());
                                     }
                                 }
+                                if(news.getType()==3){
+                                    news.setName(friendsNameMap.get(news.getEmail()));
+                                }
                             }
                             adapter.submitList(newsList);
                         });
