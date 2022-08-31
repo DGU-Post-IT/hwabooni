@@ -83,7 +83,9 @@ public class EmotionRecordFragment extends DialogFragment {
 
         Date today = new Date();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd:hh:mm:s");
         String docSubject = format.format(today);
+        String eventSubject =  format2.format(today);
         Log.d(TAG, "writeEmotionToDb: "+docSubject);
 
         WriteBatch batch = db.batch();
@@ -98,6 +100,15 @@ public class EmotionRecordFragment extends DialogFragment {
         DocumentReference emotionRef = db.collection("User").document(auth.getCurrentUser().getEmail())
                 .collection("emotion").document(docSubject);
         batch.set(emotionRef, data2);
+
+        Map<String,Object> data3 = new HashMap<>();
+        data3.put("email",auth.getCurrentUser().getEmail());
+        data3.put("data",String.valueOf(emotion.getType()));
+        data3.put("type",3);
+        data3.put("timestamp",new Timestamp(today));
+        DocumentReference emotionRef2 = db.collection("User").document(auth.getCurrentUser().getEmail())
+                .collection("event").document(eventSubject);
+        batch.set(emotionRef2, data3);
 
         batch.commit().addOnCompleteListener(task -> {
             if(task.isSuccessful()){
