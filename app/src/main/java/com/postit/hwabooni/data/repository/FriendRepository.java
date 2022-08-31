@@ -11,6 +11,7 @@ public class FriendRepository {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public void getFriendsData(ArrayList<String> followers, Callback callback){
+        if(followers==null) return;
         AtomicInteger cnt = new AtomicInteger(followers.size());
         ArrayList<FriendData> data = new ArrayList<>();
         for (String id : followers){
