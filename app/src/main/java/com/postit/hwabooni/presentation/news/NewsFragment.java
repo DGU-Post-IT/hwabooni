@@ -64,6 +64,7 @@ public class NewsFragment extends Fragment {
             binding.refreshLayout.setRefreshing(false);
         });
 
+        if(auth.getCurrentUser() == null) return;
         db.collection("User").document(auth.getCurrentUser().getEmail()).get().addOnCompleteListener((task) -> {
             if (task.isSuccessful()) {
                 me = task.getResult().toObject(User.class);
