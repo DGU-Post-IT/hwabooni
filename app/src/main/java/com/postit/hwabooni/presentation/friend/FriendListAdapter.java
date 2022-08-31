@@ -43,7 +43,7 @@ public class FriendListAdapter extends RecyclerView.Adapter {
     FirebaseAuth auth = FirebaseAuth.getInstance();
 
     interface FriendClickListener {
-        void onClick(String name,String email);
+        void onClick(String name, String email);
     }
 
     private FriendClickListener friendClickListener;
@@ -68,7 +68,7 @@ public class FriendListAdapter extends RecyclerView.Adapter {
         this.myName = myName;
     }
 
-    public void setMyEmotion(String emotion){
+    public void setMyEmotion(String emotion) {
         this.myEmotion = emotion;
     }
 
@@ -92,7 +92,9 @@ public class FriendListAdapter extends RecyclerView.Adapter {
         this.friendDeleteListener = listener;
     }
 
-    public void setFriendClickListener(FriendClickListener listener){this.friendClickListener=listener;}
+    public void setFriendClickListener(FriendClickListener listener) {
+        this.friendClickListener = listener;
+    }
 
     public FriendListAdapter(Context context) {
         this.friend = new ArrayList<>();
@@ -130,12 +132,17 @@ public class FriendListAdapter extends RecyclerView.Adapter {
             final FriendRecyclerviewHeaderBinding binding = headerViewHolder.binding;
             Log.d("user이름", myName);
             binding.myName.setText(myName);
-            Drawable drawable = AppCompatResources.getDrawable(binding.getRoot().getContext(),Emotion.values()[Integer.parseInt(myEmotion)].getIcon());
-            binding.myEmotionImage.setImageDrawable(drawable);
+            try {
+                Drawable drawable = AppCompatResources.getDrawable(binding.getRoot().getContext(), Emotion.values()[Integer.parseInt(myEmotion)].getIcon());
+                binding.myEmotionImage.setImageDrawable(drawable);
+            } catch (Exception e) {
+                Log.d("TAG", "onBindViewHolder: " + e.toString());
+            }
             binding.helperName.setText("사회복지사분 성함");
             if (listener != null) binding.emotionRecordButton.setOnClickListener(listener);
-            if (mypageListener!=null) binding.infoButton.setOnClickListener(mypageListener);
-            if (friendAddListener!=null) binding.friendAddButton.setOnClickListener(friendAddListener);
+            if (mypageListener != null) binding.infoButton.setOnClickListener(mypageListener);
+            if (friendAddListener != null)
+                binding.friendAddButton.setOnClickListener(friendAddListener);
 
         } else {
             position -= 1;
@@ -145,7 +152,7 @@ public class FriendListAdapter extends RecyclerView.Adapter {
             String friendEmail = friend.get(position).getEmail();
             binding.friendName.setText(friendName);
 
-            if(friend.get(position).getEmotion()!=null){
+            if (friend.get(position).getEmotion() != null) {
                 Log.d("현재친구", friend.get(position).getName().toString());
                 Log.d("해당친구 감정", friend.get(position).getEmotion());
                 Drawable drawable = AppCompatResources.getDrawable(binding.getRoot().getContext(), Emotion.values()[Integer.parseInt(friend.get(position).getEmotion())].getIcon());
@@ -165,14 +172,13 @@ public class FriendListAdapter extends RecyclerView.Adapter {
             binding.getRoot().setOnClickListener((v) -> {
                 Log.d("", "click됨");
                 if (friendClickListener == null) return;
-                friendClickListener.onClick(friendName,friendEmail);
+                friendClickListener.onClick(friendName, friendEmail);
             });
 
             binding.friendCallButton.setOnClickListener((v) -> {
                 Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(phoneNumber));
                 binding.getRoot().getContext().startActivity(intent);
             });
-
 
 
         }
@@ -215,7 +221,7 @@ public class FriendListAdapter extends RecyclerView.Adapter {
         return friend.size() + 1;
     }
 
-    public void setFriend(ArrayList<FriendData> friend){
+    public void setFriend(ArrayList<FriendData> friend) {
         this.friend = friend;
     }
 }
