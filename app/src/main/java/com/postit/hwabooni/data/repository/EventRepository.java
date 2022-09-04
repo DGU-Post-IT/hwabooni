@@ -1,17 +1,19 @@
 package com.postit.hwabooni.data.repository;
 
+import android.os.Build;
 import android.util.Log;
 
-import com.google.firebase.Timestamp;
+import androidx.annotation.RequiresApi;
+
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.postit.hwabooni.model.FriendData;
 import com.postit.hwabooni.model.News;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class EventRepository {
@@ -38,7 +40,7 @@ public class EventRepository {
                             }
                         }
                         if (cnt.decrementAndGet() == 0) {
-                            Log.d(TAG, "getEventList: " + newsArrayList.size());
+                            Collections.sort(newsArrayList, Comparator.comparing(News::getTimestamp).reversed());
                             callback.invoke(newsArrayList);
                         }
                     });
