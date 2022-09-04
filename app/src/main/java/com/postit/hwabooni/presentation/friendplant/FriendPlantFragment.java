@@ -203,9 +203,9 @@ public class FriendPlantFragment extends Fragment {
         }else{
             binding.tempNo.setVisibility(View.GONE);
             binding.tempIndicator.setVisibility(View.VISIBLE);
-            if(value <= 15) {
+            if(value <= 20) {
                 binding.tempIndicator.setValue(0.001);
-            } else if(value >= 25) {
+            } else if(value >= 30) {
                 binding.tempIndicator.setValue(0.999);
             } else {
                 binding.tempIndicator.setValue((value - 15) / 10);
