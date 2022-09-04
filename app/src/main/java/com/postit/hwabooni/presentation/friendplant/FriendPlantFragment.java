@@ -208,7 +208,7 @@ public class FriendPlantFragment extends Fragment {
             } else if(value >= 30) {
                 binding.tempIndicator.setValue(0.999);
             } else {
-                binding.tempIndicator.setValue((value - 15) / 10);
+                binding.tempIndicator.setValue((value - 20) / 10);
             }
         }
     }
