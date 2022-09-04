@@ -2,6 +2,7 @@ package com.postit.hwabooni.presentation.signup;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -66,6 +67,11 @@ public class SignUpActivity extends AppCompatActivity {
 
         binding.signUpButton.setOnClickListener(view -> {
             signup();
+        });
+
+        binding.buttonHelpCall.setOnClickListener((v) -> {
+            Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:01088584584"));
+            startActivity(intent);
         });
 
 

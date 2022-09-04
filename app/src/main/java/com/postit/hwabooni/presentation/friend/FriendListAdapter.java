@@ -144,6 +144,14 @@ public class FriendListAdapter extends RecyclerView.Adapter {
             if (friendAddListener != null)
                 binding.friendAddButton.setOnClickListener(friendAddListener);
 
+            binding.helperCallButton.setOnClickListener((v) -> {
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:01088584584"));
+                context.startActivity(intent);
+            });
+
+
+
+
         } else {
             position -= 1;
             FriendViewHolder itemViewHolder = (FriendViewHolder) holder;
@@ -179,6 +187,8 @@ public class FriendListAdapter extends RecyclerView.Adapter {
                 Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(phoneNumber));
                 binding.getRoot().getContext().startActivity(intent);
             });
+
+
 
 
         }
