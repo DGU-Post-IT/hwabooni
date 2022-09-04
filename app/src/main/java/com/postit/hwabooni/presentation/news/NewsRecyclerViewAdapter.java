@@ -6,9 +6,11 @@ import android.net.Uri;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
@@ -85,8 +87,11 @@ public class NewsRecyclerViewAdapter extends ListAdapter<News, NewsRecyclerViewA
                 binding.newsImageView.setVisibility(View.GONE);
             }
             binding.callButton.setOnClickListener((v)->{
-                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:01044654"));
-                binding.getRoot().getContext().startActivity(intent);
+                if(news.getPhone()!=null){
+                    String uri = "tel:" + news.getPhone();
+                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(uri));
+                    binding.getRoot().getContext().startActivity(intent);
+                }
             });
         }
     }
