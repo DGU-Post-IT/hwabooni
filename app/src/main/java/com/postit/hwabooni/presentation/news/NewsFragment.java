@@ -39,6 +39,7 @@ public class NewsFragment extends Fragment {
     User me;
     ArrayList<FriendData> friendDataList;
     HashMap<String, String> friendsNameMap;
+    HashMap<String, String> friendsPhoneMap;
     HashMap<String, PlantData> friendsPlantMap;
 
     @Nullable
@@ -52,6 +53,7 @@ public class NewsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         friendsNameMap = new HashMap<>();
+        friendsPhoneMap = new HashMap<>();
         friendDataList = new ArrayList<>();
 
         View temp = view.findViewById(R.id.toolBar);
@@ -72,6 +74,7 @@ public class NewsFragment extends Fragment {
                     friendDataList = data;
                     for (FriendData friendData : data) {
                         friendsNameMap.put(friendData.getId(), friendData.getName());
+                        friendsPhoneMap.put(friendData.getId(), friendData.getPhone());
                     }
                     new PlantRepository().getFriendsPlantList(data, (friendsPlantMap) -> {
                         this.friendsPlantMap = friendsPlantMap;
@@ -90,6 +93,7 @@ public class NewsFragment extends Fragment {
                                 if(news.getType()==3){
                                     news.setName(friendsNameMap.get(news.getEmail()));
                                 }
+                                news.setPhone(friendsPhoneMap.get(news.getEmail()));
                             }
                             adapter.submitList(newsList);
                         });
