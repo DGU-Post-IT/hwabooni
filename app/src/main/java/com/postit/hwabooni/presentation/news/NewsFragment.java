@@ -1,5 +1,6 @@
 package com.postit.hwabooni.presentation.news;
 
+import android.app.usage.UsageStatsManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -52,6 +53,7 @@ public class NewsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        UsageStatsManager usm = getContext().getSystemService(UsageStatsManager.class);
         friendsNameMap = new HashMap<>();
         friendsPhoneMap = new HashMap<>();
         friendDataList = new ArrayList<>();

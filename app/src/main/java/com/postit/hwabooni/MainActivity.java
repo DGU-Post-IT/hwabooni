@@ -1,27 +1,22 @@
 package com.postit.hwabooni;
 
+import static android.app.AppOpsManager.MODE_ALLOWED;
+import static android.app.AppOpsManager.OPSTR_GET_USAGE_STATS;
+
+import android.app.AppOpsManager;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Process;
+import android.provider.Settings;
+import android.widget.Toast;
+
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 
-import android.app.ActionBar;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
-
-import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.postit.hwabooni.databinding.ActivityMainBinding;
@@ -31,6 +26,7 @@ import com.postit.hwabooni.presentation.login.LoginActivity;
 import com.postit.hwabooni.presentation.market.MarketFragment;
 import com.postit.hwabooni.presentation.news.NewsFragment;
 import com.postit.hwabooni.presentation.plant.PlantFragment;
+import com.postit.hwabooni.service.StatUploadService;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -71,6 +67,28 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
+        if(!checkStatPermission()){
+            Toast.makeText(
+                    this,
+                    "앱 사용을 위해 사용 로그 권한이 필요합니다.",
+                    Toast.LENGTH_LONG
+            ).show();
+            startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+        }
+
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(checkStatPermission()) startService(new Intent(this, StatUploadService.class));
+    }
+
+    private boolean checkStatPermission(){
+        AppOpsManager aom = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
+        int mode = aom.checkOpNoThrow(OPSTR_GET_USAGE_STATS, Process.myUid(), "com.postit.hwabooni");
+        return mode == MODE_ALLOWED;
     }
 
 }

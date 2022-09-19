@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.postit.hwabooni">
+
+    <uses-permission
+        android:name="android.permission.PACKAGE_USAGE_STATS"
+        tools:ignore="ProtectedPermissions" />
 
     <application
         android:allowBackup="true"
@@ -23,6 +28,7 @@
             android:windowSoftInputMode="adjustResize"
             />
         <activity android:name=".presentation.login.LoginActivity"/>
+        <service android:name=".service.StatUploadService"/>
     </application>
 
 </manifest>
