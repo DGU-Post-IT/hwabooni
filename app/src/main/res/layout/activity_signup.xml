@@ -132,6 +132,7 @@
         android:textSize="24sp" />
 
     <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_help_call"
         android:layout_marginTop="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -139,7 +140,6 @@
         android:textColor="@color/black"
         android:textSize="24sp"
         android:background="@drawable/button_help_call"
-        android:id="@+id/button_help_call"
         />
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/sign_up_button"
