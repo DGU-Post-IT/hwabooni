@@ -63,6 +63,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:src="@drawable/button_mission_incompletion"
+        android:visibility="gone"
         ></ImageView>
 
     <androidx.cardview.widget.CardView
@@ -103,14 +104,14 @@
                         app:rightText="충분해요"
                         app:strokeColor="@color/stroke_blue"
                         app:indicatorColor="@color/indicator_blue"
-                        android:visibility="visible" />
+                        android:visibility="gone" />
 
                     <ImageView
                         android:id="@+id/humidNo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/water_no"
-                        android:visibility="gone" />
+                        android:visibility="visible" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -155,14 +156,14 @@
                         app:rightText="더워요"
                         app:strokeColor="@color/stroke_yellow"
                         app:indicatorColor="@color/indicator_yellow"
-                        android:visibility="visible" />
+                        android:visibility="gone" />
 
                     <ImageView
                         android:id="@+id/tempNo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/temp_no"
-                        android:visibility="gone" />
+                        android:visibility="visible" />
 
                 </LinearLayout>
 
