@@ -89,7 +89,7 @@ public class FriendFragment extends Fragment implements DialogInterface.OnDismis
                     adapter.setMyName(user==null?"null":user.getName());
                     if(user!=null){
                         adapter.setMyEmotion(user.getEmotion());
-                    }
+                    } else return;
                     if(user.getFollower()!=null){
                         new FriendRepository().getFriendsData(user.getFollower(),(data)->{
                             Log.d(TAG, "onViewCreated: callback");
