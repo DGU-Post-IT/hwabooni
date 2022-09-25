@@ -88,16 +88,21 @@ public class PlantFragment extends Fragment {
         });
 
         db.collection("User").document(auth.getCurrentUser().getEmail()).collection("plant").get().addOnCompleteListener((task)->{
-            if(task.isSuccessful()){
-                for(QueryDocumentSnapshot doc : task.getResult()){
+            if(task.isSuccessful()) {
+                for (QueryDocumentSnapshot doc : task.getResult()) {
                     Log.d(TAG, doc.getId() + " => " + doc.getData());
                     PlantData plant = doc.toObject(PlantData.class);
                     plantDataList.add(plant);
                 }
-                if(plantDataList.size()>0){
+                if (plantDataList.size() > 0) {
                     loadPlantInfo(plantDataList.get(0));
                 }
+                else{
+                    showWhenNoInfo();
+                }
                 plantAdapter.notifyDataSetChanged();
+            }else{
+                showWhenNoInfo();
             }
         });
     }
@@ -156,6 +161,11 @@ public class PlantFragment extends Fragment {
         String imageUrl = plant.getPicture();
         Glide.with(getContext()).load(imageUrl).into(binding.ivPlant);
 
+        binding.ivPrettyWord.setVisibility(View.VISIBLE);
+        binding.ivPlant.setVisibility(View.VISIBLE);
+        binding.btnPlantDelete.setVisibility(View.VISIBLE);
+
+
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         if (format.format(new Date()).equals(prettyWord)) {
             binding.ivPrettyWord.setImageResource(R.drawable.button_misson_completion);
@@ -170,6 +180,16 @@ public class PlantFragment extends Fragment {
             setHumid(-99999);
             setTemp(-99999);
         }
+    }
+
+    void showWhenNoInfo(){
+        binding.humidNo.setVisibility(View.VISIBLE);
+        binding.humidIndicator.setVisibility(View.GONE);
+        binding.tempNo.setVisibility(View.VISIBLE);
+        binding.tempIndicator.setVisibility(View.GONE);
+        binding.ivPrettyWord.setVisibility(View.GONE);
+        binding.ivPlant.setVisibility(View.GONE);
+        binding.btnPlantDelete.setVisibility(View.GONE);
     }
 
     void setHumid(double value) {
