@@ -72,6 +72,7 @@ public class NewsFragment extends Fragment {
         db.collection("User").document(auth.getCurrentUser().getEmail()).get().addOnCompleteListener((task) -> {
             if (task.isSuccessful()) {
                 me = task.getResult().toObject(User.class);
+                if(me == null) return;
                 new FriendRepository().getFriendsData(me.getFollower(), (data) -> {
                     friendDataList = data;
                     for (FriendData friendData : data) {
