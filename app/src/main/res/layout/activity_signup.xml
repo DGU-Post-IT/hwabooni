@@ -23,6 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/black"
+        android:textColor="@color/black"
         android:hint="(예시) 홍길동"
         android:textSize="24sp" />
 
@@ -39,6 +40,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/black"
+        android:textColor="@color/black"
         android:hint="(예시) 01012345678"
         android:textSize="24sp" />
 
@@ -55,6 +57,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/black"
+        android:textColor="@color/black"
         android:hint="(예시) 61"
         android:textSize="24sp" />
 
@@ -71,6 +74,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/black"
+        android:textColor="@color/black"
         android:hint="(예시) abcdef@gmail.com"
         android:textSize="24sp" />
 
@@ -130,6 +134,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/black"
+        android:textColor="@color/black"
         android:textSize="24sp" />
 
     <androidx.appcompat.widget.AppCompatButton
