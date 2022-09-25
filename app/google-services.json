@@ -14,6 +14,43 @@
       },
       "oauth_client": [
         {
+          "client_id": "379390629499-71vffnkd3af7hvc2r5qmsi6a0hcopnop.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.postit.hwabooni",
+            "certificate_hash": "976d4994bbabd702cabdabbb8a03f923f9bd3709"
+          }
+        },
+        {
+          "client_id": "379390629499-q536qjrcb32msgno67ju8rvl24tr0q7i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-2RObhpnjJkV1LC3lFZOmYfPSV0L41hE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "379390629499-q536qjrcb32msgno67ju8rvl24tr0q7i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:379390629499:android:38f84c1ff7004c21fc74de",
+        "android_client_info": {
+          "package_name": "com.postit.hwabooni2"
+        }
+      },
+      "oauth_client": [
+        {
           "client_id": "379390629499-q536qjrcb32msgno67ju8rvl24tr0q7i.apps.googleusercontent.com",
           "client_type": 3
         }
