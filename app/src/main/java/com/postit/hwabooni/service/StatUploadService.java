@@ -54,7 +54,7 @@ public class StatUploadService extends Service {
         if (!(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)) stopSelf();
         if (!(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)) return START_NOT_STICKY;
 
-        UsageStatsManager usm = (UsageStatsManager) getSystemService(UsageStatsManager.class);
+        UsageStatsManager usm = getSystemService(UsageStatsManager.class);
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DAY_OF_MONTH,-1);
         long millis = System.currentTimeMillis();
