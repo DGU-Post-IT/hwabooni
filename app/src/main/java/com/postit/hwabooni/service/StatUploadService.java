@@ -50,6 +50,9 @@ public class StatUploadService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         if (auth.getCurrentUser() == null) stopSelf();
+        if (auth.getCurrentUser() == null) return START_NOT_STICKY;
+        if (auth.getCurrentUser().getEmail() == null) stopSelf();
+        if (auth.getCurrentUser().getEmail() == null) return START_NOT_STICKY;
         if (!checkStatPermission()) stopSelf();
         if (!(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)) stopSelf();
         if (!(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)) return START_NOT_STICKY;

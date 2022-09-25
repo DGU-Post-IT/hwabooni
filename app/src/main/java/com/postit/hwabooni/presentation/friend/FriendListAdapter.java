@@ -32,6 +32,7 @@ import com.postit.hwabooni.databinding.CardviewFriendBinding;
 import com.postit.hwabooni.databinding.FriendRecyclerviewHeaderBinding;
 import com.postit.hwabooni.model.Emotion;
 import com.postit.hwabooni.model.FriendData;
+import com.postit.hwabooni.model.PlantData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,6 +54,8 @@ public class FriendListAdapter extends RecyclerView.Adapter {
     private static final int TYPE_ITEM = 1;
 
     private ArrayList<FriendData> friend;
+
+    private ArrayList<PlantData> plant;
 
     private Context context;
 
@@ -159,6 +162,9 @@ public class FriendListAdapter extends RecyclerView.Adapter {
             String friendName = friend.get(position).getName();
             String friendEmail = friend.get(position).getEmail();
             binding.friendName.setText(friendName);
+
+
+
 
             if (friend.get(position).getEmotion() != null) {
                 Log.d("현재친구", friend.get(position).getName().toString());
