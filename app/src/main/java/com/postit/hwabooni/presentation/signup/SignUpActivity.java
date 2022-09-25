@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -90,11 +91,14 @@ public class SignUpActivity extends AppCompatActivity {
             signup();
         });
 
-        binding.buttonHelpCall.setOnClickListener((v) -> {
-            Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:01088584584"));
-            startActivity(intent);
-        });
 
+        binding.btnHelpCall.setOnClickListener((v)->{
+            String phone = "01088584584";   //이하경 번호
+            String uri = "tel:" + phone;
+            Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(uri));
+            binding.getRoot().getContext().startActivity(intent);
+
+        });
 
     }
 
