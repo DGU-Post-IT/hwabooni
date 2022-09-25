@@ -30,6 +30,8 @@ import com.google.firebase.firestore.SetOptions;
 import com.postit.hwabooni.databinding.ActivitySignupBinding;
 import com.postit.hwabooni.model.User;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class SignUpActivity extends AppCompatActivity {
 
     ActivitySignupBinding binding;
@@ -113,15 +115,15 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
+        AtomicInteger cnt = new AtomicInteger(0);
+
         auth.createUserWithEmailAndPassword(id, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     Toast.makeText(getApplicationContext(), "계정을 성공적으로 생성하였습니다.", Toast.LENGTH_SHORT).show();
                     Log.d("SignUpActivity", "회원가입성공");
-                    //Intent intent = new Intent(getApplicationContext(), MyInfoActivity.class);
-                    //startActivity(intent);
-                    //finish();
+                    if(cnt.incrementAndGet()==2) finish();
                 } else {
                     Log.d("SignUpActivity", "회원가입실패");
                     Toast.makeText(getApplicationContext(), "계정 생성에 실패하였습니다..", Toast.LENGTH_SHORT).show();
@@ -145,7 +147,7 @@ public class SignUpActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d("SignUpActivity", "회원가입 후 DB 생성 성공");
-                        finish();
+                        if(cnt.incrementAndGet()==2) finish();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
