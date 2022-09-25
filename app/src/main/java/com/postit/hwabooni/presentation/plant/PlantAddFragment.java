@@ -29,6 +29,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -37,6 +38,8 @@ import com.postit.hwabooni.model.PlantData;
 import com.postit.hwabooni.presentation.friend.FriendAddFragment;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PlantAddFragment extends DialogFragment {
 
@@ -135,18 +138,27 @@ public class PlantAddFragment extends DialogFragment {
                             //문서 생성 및 업로드
                             String newPlantName = binding.tvPlantName.getText().toString(); //식물이름
                             Log.d("url가져오기 성공 url : ", urlString.toString());
+
+                            WriteBatch batch = db.batch();
                             DocumentReference ref = db.collection("User").document(email).collection("plant").document(newPlantName);
-                            
+                            DocumentReference userRef = db.collection("User").document(email);
+
                             PlantData newPlantData = new PlantData(newPlantName, urlString);
-                            ref.set(newPlantData);
-                            Log.d(TAG, "onComplete: 식물추가 성공");
-                            Toast.makeText(getActivity(), "식물추가 성공", Toast.LENGTH_LONG).show();
-                            Toast.makeText(getContext(), "친구추가완료", Toast.LENGTH_LONG).show();
-                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                            fragmentManager.beginTransaction().remove(PlantAddFragment.this).commit();
-                            fragmentManager.popBackStack();
+                            batch.set(ref,newPlantData);
 
+                            Map<String,Object> data1 = new HashMap<>();
+                            data1.put("plantImage",urlString);
+                            batch.update(userRef,data1);
 
+                            batch.commit().addOnCompleteListener(task1 -> {
+                                if(task1.isSuccessful()){
+                                    Log.d(TAG, "onComplete: 식물추가 성공");
+                                    Toast.makeText(getActivity(), "식물추가 성공", Toast.LENGTH_LONG).show();
+                                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                                    fragmentManager.beginTransaction().remove(PlantAddFragment.this).commit();
+                                    fragmentManager.popBackStack();
+                                }
+                            });
 
                         } else {
                             Log.d(TAG, "onComplete: url가져오기 실패");
